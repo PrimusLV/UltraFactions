@@ -1,0 +1,32 @@
+---
+# If Faction has no owner delete it
+deleteUnusedFactions: true
+factionCreatePrice: 1000 # $
+# Use '~' there is no limit
+maxPlotsPerFaction: ~
+# Call UltraFactions events
+callEvents: true
+# Preffered economy from avaliables: [MassiveEconomy, EconomyAPI, PocketMoney, GoldStd]
+prefferedEconomy: EconomyAPI
+# Ranks:
+leaderRank: Leader #1
+officerRank: Officer #2
+3Rank: Member #3
+4Rank: Rookie #4
+5Rank: NewBie #5
+#
+# Chat format
+# Use color codes? {COLOR_DARK_GRAY}, {COLOR_PURPLE} ?
+useCustomColorCodes: true
+chatFormat: '{COLOR_DARK_GRAY}[{COLOR_DARK_RED}{faction}{COLOR_DARK_GRAY}][{COLOR_DARK_RED}{rank}{COLOR_DARK_GRAY}] {COLOR_WHITE}{name}{COLOR_DARK_RED}: {COLOR_WHITE}{message} 
+#
+#
+countKills: true
+countDeaths: true
+#
+# Data Provider (yaml, -SQLite3, -MySQL) Last two are not implemented
+dataProvider: yaml
+#
+# DO NOT CHANGE THIS!
+version: 0.0.1
+...
