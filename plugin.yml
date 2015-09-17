@@ -1,0 +1,57 @@
+name: UltraFactions
+author: Primus
+api: 1.12.0
+description: "Fully featured faction plugin for PocketMine-MP"
+version: 0.0.1
+main: primus\ultrafactions\UFMain
+
+commands:
+ faction:
+  description: "Main UltraFactions command type \'/f help\' for more info"
+  default: true
+  permission: uf.*
+  alias: [f, fac]
+  
+permissions:
+ uf.*:
+  default: true
+  description: "Top Permission, allows all plugin features"
+  children:
+   uf.command.*:
+    default: true
+    description: "Top command permission, allows all commands"
+    children:
+     uf.command.info:
+      default: true
+      description: "Allows command \'info\'"
+     uf.command.create:
+      default: true
+      description: "Allows command \'create\'"
+    uf.damage.*:
+     default: false
+     description: "Allows to damage all faction memebers"
+     children:
+      uf.damage.team:
+       default: false
+       description: "Allow to hit team mates"
+      uf.damage.friends:
+       default: false
+       description: "Allow to hit friend faction members"
+      uf.damage.enemies:
+       default: true
+       description: "Allow to hit enemy faction members"
+      uf.damage.neutral:
+       default: true
+       description: "Allow to hit neutral faction members"
+     uf.break.*:
+      default: false
+      description: "Allow to use all faction's claimed plots"
+# uf.break.friends
+# uf.break.enemies
+# uf.break.neutral
+# uf.interact.friends
+# uf.interact.enemies
+# uf.interact.neutral
+# uf.place.friends
+# uf.place.enemies
+# uf.place.neutral
