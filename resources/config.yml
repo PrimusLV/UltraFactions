@@ -18,7 +18,7 @@ officerRank: Officer #2
 # Chat format
 # Use color codes? {COLOR_DARK_GRAY}, {COLOR_PURPLE} ?
 useCustomColorCodes: true
-chatFormat: '{COLOR_DARK_GRAY}[{COLOR_DARK_RED}{faction}{COLOR_DARK_GRAY}][{COLOR_DARK_RED}{rank}{COLOR_DARK_GRAY}] {COLOR_WHITE}{name}{COLOR_DARK_RED}: {COLOR_WHITE}{message} 
+chatFormat: '{COLOR_DARK_GRAY}[{COLOR_DARK_RED}{faction}{COLOR_DARK_GRAY}][{COLOR_DARK_RED}{rank}{COLOR_DARK_GRAY}] {COLOR_WHITE}{name}{COLOR_DARK_RED}: {COLOR_WHITE}{message}' 
 #
 #
 countKills: true
