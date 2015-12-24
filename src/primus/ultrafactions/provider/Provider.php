@@ -7,11 +7,11 @@ use primus\ultrafactions\Faction;
 
 interface Provider {
 
-  public function getPlayerData(Player $player);
+  public function getMemberData(Player $player);
   
-  public function setPlayerData(Player $player, array $data);
+  public function setMemberData(Player $player, array $data);
   
-  public function removePlayerData(Player $player);
+  public function removeMemberData(Player $player);
 
   public function getFactionData(Faction $faction);
   
