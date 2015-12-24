@@ -42,7 +42,7 @@ class Member {
     // TODO
   }
   
-  public static function destroy(){
+  public function destroy(){
     $this->faction = null;
     $this->stats = [];
     $this->player = null;
