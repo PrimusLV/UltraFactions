@@ -38,11 +38,11 @@ class Member {
     $this->stats = $stats;
   }
   
-  public function refreshStats(){
+  public static function refreshStats(){
     // TODO
   }
   
-  public function destroy(){
+  public static function destroy(){
     $this->faction = null;
     $this->stats = [];
     $this->player = null;
