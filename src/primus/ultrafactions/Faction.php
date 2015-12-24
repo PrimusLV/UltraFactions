@@ -13,13 +13,13 @@ class Faction {
 		return $this->name;
 	}
 
-	public function __construct(array $players, array $plots, array $friends, array $enemies, array $stats, $name, $date){
+	public function __construct(array $member, array $plots, array $friends, array $enemies, array $stats, $name, $date){
 		if(!isset($stats['kills']) || !isset($stats['deaths'])){
 			$stats['kills'] = 0;
 			$stats['deaths'] = 0;
 		}
 		
-		$this->players = $players;
+		$this->members = $members;
 		$this->plots = $plots;
 		$this->friends = $friends;
 		$this->enemies = $enemies;
@@ -36,8 +36,8 @@ class Faction {
 		$this->name = $name;
 	}
 	
-	public function getPlayers(){
-		return $this->players;
+	public function getMembers(){
+		return $this->members;
 	}
 	
 	public function addPlayer(IPlayer $player, $rank='Member', $invitedBy = 'Undefined'){
@@ -53,8 +53,8 @@ class Faction {
 		);
 	}
 	
-	public function setPlayers(array $players){
-		$this->players = $players;
+	public function setMembers(array $players){
+		$this->members = $members;
 	}
 	
 	public function getPlots(){
@@ -155,13 +155,13 @@ class Faction {
 	}
 	
 	public function isMember(IPlayer $player){
-		if( array_key_exists($player->getName(), $this->players) ) return true;
-		echo $player->getName()." was not in ".$this.' faction current members: '.var_dump($this->players);
+		if( array_key_exists($player->getName(), $this->members) ) return true;
+		echo $player->getName()." was not in ".$this.' faction current members: '.var_dump($this->members);
 		return false;
 	}
 	
 	public function __destruct(){
-		Server::getInstance()->getLogger()->info('[UltraFactions] '.$this.' destroyed due to it was not used by any player');
+		//Server::getInstance()->getLogger()->info('[UltraFactions] '.$this.' destroyed due to it was not used by any player');
 	}
 
 
