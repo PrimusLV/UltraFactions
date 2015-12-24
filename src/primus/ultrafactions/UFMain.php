@@ -7,6 +7,11 @@ use pocketmine\command\Command;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 
+use primus\ultrafactions\provider\DefaultProvider;
+use primus\ultrafactions\provider\MySQLProvider;
+use primus\ultrafactions\provider\SQLite3Provider;
+use primus\ultrafactions\provider\DummyProvider;
+use primus\ultrafactions\provider\Provider;
 use primus\ultrafactions\FactionLoader;
 use primus\ultrafactions\FactionManager;
 use primus\ultrafactions\event\player\PlayerFactionJoinEvent;
