@@ -17,7 +17,7 @@ class MessageFormat {
 	const SUCCESS = 5;
 	const NORMAL = 6;
 	
-	public function formatMessage($message, $type = self::NORMAL){
+	public static function formatMessage($message, $type = self::NORMAL){
 		switch($type){
 			case self::ERROR:
 			 return /*self::PREFIX.*/TextFormat::DARK_RED.$message;
