@@ -29,6 +29,8 @@ class UFMain extends PluginBase {
   public $config;
   /** @var FactionCommandHandler $cmdHandler */
   public $cmdHandler;
+  /** @var Provider */
+  protected $provider;
 
   public function onLoad(){
 
@@ -41,6 +43,27 @@ class UFMain extends PluginBase {
 	$this->getServer()->getPluginManager()->registerEvents(new FactionEventHandler($this), $this);
 	//$this->saveDefaultConfig();
 	//$this->config = $this->getConfig();
+	switch ( $this->getConfig()->get('provider-type') ) {
+		case 'yaml':
+			$this->provider = new DefaultProvider($this);
+			$provider = 'YAML';
+		break;
+		case 'mysql':
+			$this->provider = new MySQLProvider($this);
+			$provider = 'MySQL';
+		break;
+		case 'sqlite3':
+			$this->provider = new SQLite3($this);
+			$provider = "SQLite3";
+		break;
+	}
+	if(!isset($provider)){
+		$this->provider = new DummyProvider($this);
+		$this->getLogger()->notice("No data provider was given. Using Dummy!");
+		break;
+	} else {
+		$this->getLogger()->info("Selected Data Provider: $provider");
+	}
 	$this->test();
   }
   public function onDisable(){
@@ -55,6 +78,13 @@ class UFMain extends PluginBase {
   *| | | | | |      | |
   *|_| |_| |_|      |_|
   */
+	
+	/**
+	 * @return Provider|null
+	 */
+	public function getProvider(){
+		return $this->provider;
+	}
 
   /**
   * @param Player $player;
