@@ -34,20 +34,24 @@ class UFMain extends PluginBase {
   public $config;
   /** @var FactionCommandHandler $cmdHandler */
   public $cmdHandler;
-  /** @var Provider */
+  /** @var Provider $provider */
   protected $provider;
 
-  public function onLoad(){
-
-  }
+  public function onLoad(){}
+  
   public function onEnable(){
 	@mkdir($this->getDataFolder());
 	$this->fmanager = new FactionManager($this);
 	$this->mformatter = new MessageFormat();
 	$this->cmdHandler = new FactionCommandHandler($this);
 	$this->getServer()->getPluginManager()->registerEvents(new FactionEventHandler($this), $this);
-	//$this->saveDefaultConfig();
-	//$this->config = $this->getConfig();
+	
+	/**
+	 * Init Config
+	 */
+	$this->saveDefaultConfig();
+	$this->config = $this->getConfig();
+	
 	switch ( $this->getConfig()->get('provider-type') ) {
 		case 'yaml':
 			$this->provider = new DefaultProvider($this);
@@ -76,24 +80,24 @@ class UFMain extends PluginBase {
 	  $this->fmanager->saveFactions();
   }
 
-  /* ___     _ _ _   _
-  * /   \   /     | |_|
-  *|  X  \ |   X  |  _
-  *|  _  | | _____| | |
-  *| | | | | |      | |
-  *|_| |_| |_|      |_|
-  */
+  /*	  ___     _ _ _   _
+   * 	 /   \   /     | |_|
+   *	|  X  \ |   X  |  _
+   *	|  _  | | _____| | |
+   *	| | | | | |      | |
+   *	|_| |_| |_|      |_|
+   */
 	
-	/**
-	 * @return Provider|null
-	 */
-	public function getProvider(){
-		return $this->provider;
-	}
+  /**
+   * @return Provider|null
+   */
+   public function getProvider(){
+      return $this->provider;
+   }
 
   /**
-  * @param Player $player;
-  * @return Faction|null
+   * @param Player $player;
+   * @return Faction|null
   */
   public function getPlayerFaction(Player $player){
     foreach($this->getFactions() as $faction){
@@ -122,7 +126,7 @@ class UFMain extends PluginBase {
   * @return bool
   * @description Shortcut for Faction->addPlayer();
   */
-  public function setPlayerFaction(Player $player, Faction $faction, $rank = 'Member', $invitedBy = 'Undefined'){
+  public function setPlayerFaction(Player $player, Faction $faction, $rank = 'Member', $invitedBy = 'Undefined') : bool {
     $ev = new PlayerFactionJoinEvent($player, $faction, $rank, $invitedBy);
     if($ev->isCancelled()) return false;
     if($faction->addPlayer($player, $ev->getRank(), $ev->getInviter())){
@@ -134,7 +138,7 @@ class UFMain extends PluginBase {
    * @return array
    * @description Returns all loaded factions
    */
-  public function getFactions(){
+  public function getFactions() : array {
     return $this->fmanager->getAllFactions();
   }
 
@@ -143,7 +147,7 @@ class UFMain extends PluginBase {
    * @return bool
    * @description Get does faction is loaded/created
    */
-  public function factionExists($name){
+  public function factionExists($name) : bool {
     if($this->getFaction($name) != null) return true;
     return false;
   }
@@ -153,7 +157,7 @@ class UFMain extends PluginBase {
    * @param IPlayer $player
    * @description Returns if there is player in faction with given player name
    */
-  public function isInFaction(IPlayer $player){
+  public function isInFaction(IPlayer $player) : bool {
 	  foreach($this->getFactions() as $faction){
 		  if($faction->isMember($player)) return true;
 										  return false;
@@ -165,12 +169,14 @@ class UFMain extends PluginBase {
    * @param IPlayer $playerA, IPlayer $playerB
    * @description Check if players as teammates
    */
-  public function isInSameFaction(IPlayer $playerA, IPlayer $playerB){
+  public function isInSameFaction(IPlayer $playerA, IPlayer $playerB) : bool {
 	  if($this->getPlayerFaction()->getName() === $this->getPlayerFaction()->getName()) return true;
 	  return false;
   }
   
   /**
+   * If player is in plot thats claimed return owner of plot else return false
+   * 
    * @return false|Faction
    * @param int $x, int $z
    * @description Get plot owner
@@ -182,13 +188,14 @@ class UFMain extends PluginBase {
 	   return false;
    }
    
+   // This is stupid idea I must get rid of this quickly
    public function onCommand(CommandSender $sender, Command $command, $label, array $args){
 	   $this->cmdHandler->onCommand($sender, $command, $label, $args);
 	   return true;
    }
   
   /** // Non API part ------> // */
-  
+  // Jeesus what I am doing?
   public function test(){
 	  $this->fmanager->createFaction('PrO');
 	  $this->getFaction('PrO')->addPlayer($this->getServer()->getOfflinePlayer('PrimusLV'), 'Leader :)', 'Owner');
