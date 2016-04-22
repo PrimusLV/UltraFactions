@@ -10,7 +10,6 @@ use pocketmine\utils\Config;
 use primus\ultrafactions\provider\DefaultProvider;
 use primus\ultrafactions\provider\MySQLProvider;
 use primus\ultrafactions\provider\SQLite3Provider;
-use primus\ultrafactions\provider\DummyProvider;
 use primus\ultrafactions\provider\Provider;
 use primus\ultrafactions\FactionLoader;
 use primus\ultrafactions\FactionManager;
@@ -66,14 +65,6 @@ class UFMain extends PluginBase {
 			$provider = "SQLite3";
 		break;
 	}
-	if(!isset($provider)){
-		$this->provider = new DummyProvider($this);
-		$this->getLogger()->notice("No data provider was given. Using Dummy!");
-		break;
-	} else {
-		$this->getLogger()->info("Selected Data Provider: $provider");
-	}
-	$this->test();
   }
   public function onDisable(){
 	 //if($this->getConfig()->get('destroyUnusedFactions')) $this->fmanager->deleteUnusedFactions();
