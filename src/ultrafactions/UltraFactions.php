@@ -168,7 +168,8 @@ class UltraFactions extends PluginBase
     {
         if ($this->getMember($player) === null) { // Let's make sure that player hasn't registered before
             $memberD = $this->data->getMemberData(DataProvider::playerName($player));
-            $this->members[strtolower($player->getName())] = new Member($player, $memberD);
+            $power = 
+            $this->members[strtolower($player->getName())] = new Member($player, $power, $stats, $faction);
             return true;
         }
         return false;

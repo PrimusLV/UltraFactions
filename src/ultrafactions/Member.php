@@ -37,7 +37,7 @@ class Member
     protected $faction;
     protected $player;
 
-    public function __construct(Player $player, $power = 0, array $stats, $faction = null)
+    public function __construct(Player $player, $faction, $power = 0, array $stats)
     {
         $this->player = $player;
         if (empty($stats)) {
