@@ -1,9 +1,9 @@
 name: UltraFactions
 author: Primus
-api: 1.12.0
+api: 2.0.0
 description: "Fully featured faction plugin for PocketMine-MP"
 version: 0.0.1
-main: primus\ultrafactions\UFMain
+main: ultrafactions\UltraFactions
 
 commands:
  faction:
