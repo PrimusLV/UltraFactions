@@ -1,10 +1,10 @@
 <?php
 namespace ultrafactions;
 
-use pocketmine\level\Position;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
-use pocketmine\Server;
+use pocketmine\utils\TextFormat as Text;
+
 use ultrafactions\data\DataProvider;
 use ultrafactions\data\DefaultDataProvider;
 use ultrafactions\data\MySQLDataProvider;
@@ -13,35 +13,18 @@ use ultrafactions\data\SQLite3DataProvider;
 use ultrafactions\handler\FactionEventListener;
 use ultrafactions\handler\PlayerEventListener;
 use ultrafactions\manager\FactionManager;
+use ultrafactions\manager\MemberManager;
 
 class UltraFactions extends PluginBase
 {
 
     /** @var FactionManager $factionManager */
     protected $factionManager;
+    /** @var MemberManager $memberManager */
+    protected $memberManager;
 
     /** @var DataProvider */
     private $data = null;
-
-    /**
-     * Holds loaded factions
-     *
-     * @var Faction[] $factions
-     */
-    private $factions = [];
-    /**
-     * Holds loaded Members
-     *
-     * @var Member[] $members
-     */
-    private $members = [];
-
-    public static function positionFromString($string)
-    {
-        $d = explode(":", $string);
-        $level = Server::getInstance()->getLevelByName($d[3]);
-        return new Position($d[0], $d[1], $d[2], $level);
-    }
 
     public function onLoad()
     {
@@ -52,6 +35,9 @@ class UltraFactions extends PluginBase
         Faction::setPlugin($this);
     }
 
+    /**
+     * Normal plugin init :P
+     */
     public function onEnable()
     {
         $pm = $this->getServer()->getPluginManager();
@@ -63,17 +49,19 @@ class UltraFactions extends PluginBase
             }
         } catch (\Exception $e) {
             $this->getServer()->getPluginManager()->disablePlugin($this);
-            $this->getLogger()->critical("Following error occured: " . $e->getMessage());
+            $this->getLogger()->critical("Following error occurred while initializing data provider: " . $e->getMessage());
             return; // Don't execute any furthermore code or it may cause other errors
         }
 
         // Load managers
         $this->factionManager = new FactionManager($this);
+        $this->memberManager = new MemberManager($this);
 
         // Lets register some event listeners below
         $pm->registerEvents(new PlayerEventListener($this), $this);
         $pm->registerEvents(new FactionEventListener($this), $this);
 
+        $this->getLogger()->info(Text::GREEN."Plugin loaded.");
     }
 
     private function loadDataProvider()
@@ -107,18 +95,14 @@ class UltraFactions extends PluginBase
 
     public function onDisable()
     {
-        $this->getLogger()->info("Saving Members...");
-        foreach ($this->members as $member) {
-            $member->save();
-            $this->getLogger()->debug("Saved member '" . $member->getName() . "'");
-        }
-        $this->getLogger()->info("Members saved.");
-        $this->getLogger()->info("Saving Factions...");
-        foreach ($this->factions as $faction) {
-            $faction->save();
-            $this->getLogger()->debug('Saved faction \'' . $faction->getName() . '\'');
-        }
-        $this->getLogger()->info("Factions saved.");
+        # Save all factions
+        $this->factionManager->close();
+        # Save members
+        $this->memberManager->close();
+        # And close connections or so on data provider class
+        $this->data->close();
+
+        $this->getLogger()->info(Text::LIGHT_PURPLE."Plugin disabled.");
     }
 
     public function getDataProvider() : DataProvider
@@ -126,61 +110,40 @@ class UltraFactions extends PluginBase
         return $this->data;
     }
 
-
-    public function isInFaction(Player $player)
-    {
-        return $this->getPlayerFaction($player) instanceof Faction;
-    }
-
-    /**
-     *
-     *
-     * @param Player $player
-     * @return Faction|null
-     */
-    public function getPlayerFaction(Player $player)
-    {
-        if (($m = $this->getMember($player)) != null) {
-            return $m->getFaction();
-        }
-        return null;
-    }
-
-    /**
-     * @param Player $player
-     * @return null|\ultrafactions\Member
-     */
-    public function getMember(Player $player)
-    {
-        if (isset($this->members[strtolower($player->getName())])) {
-            return $this->members[strtolower($player->getName())];
-        }
-        return null;
-    }
-
-    /**
-     * Before players can use UltraFaction features they have to be registered
-     *
-     * @param Player $player
-     * @return bool
-     */
-    public function registerPlayer(Player $player)
-    {
-        if ($this->getMember($player) === null) { // Let's make sure that player hasn't registered before
-            $memberD = $this->data->getMemberData(DataProvider::playerName($player));
-            $power = 
-            $this->members[strtolower($player->getName())] = new Member($player, $power, $stats, $faction);
-            return true;
-        }
-        return false;
-    }
-
     /**
      * @return FactionManager
      */
-    public function getFactionManager()
+    public function getFactionManager() : FactionManager
     {
         return $this->factionManager;
+    }
+
+    /**
+     * Shortcut for FactionManager::getFaction()
+     *
+     * @param $name
+     * @return null|Faction
+     */
+    public function getFaction($name){
+        return $this->factionManager->getFaction($name);
+    }
+
+    /**
+     * Shortcut for MemberManager::getFaction()
+     *
+     * @param Player $player
+     * @return Member
+     */
+    public function getMember(Player $player){
+        return $this->memberManager->getMember($player);
+    }
+
+    /**
+     * @param Player $player
+     * @return bool
+     */
+    public function isInFaction(Player $player) : bool {
+        return $this->getMember($player)->getFaction() instanceof Faction === true;
     }
 
 

@@ -60,4 +60,10 @@ abstract class DataProvider
         return $this->plugin;
     }
 
+    public function close()
+    {
+        # Call parent function to display this message :P
+        $this->getPlugin()->getLogger()->info("Closed {$this->getType()} data provider.");
+    }
+
 }

@@ -37,18 +37,16 @@ class Faction
 
     /**
      * Faction constructor.
+     * Faction should adapt to invalid data given and use Faction::$defaultData
+     *
      * @param $name
      * @param array $data
      */
     public function __construct($name, array $data)
     {
         $this->name = $name;
-        //extract($data);
-        // Can not use extract PHPStorm will throw error undefined variable
-        $this->home = $data['home'];
-        $this->allies = $data['allies'];
-        $this->enemies = $data['enemies'];
-        $this->members = $data['members'];
+
+        if(isset($faction['']))
     }
 
     /**

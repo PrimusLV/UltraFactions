@@ -60,4 +60,9 @@ class DefaultDataProvider extends DataProvider
         return true;
     }
 
+    public function close(){
+        # There is nothing to do here
+        parent::close();
+    }
+
 }

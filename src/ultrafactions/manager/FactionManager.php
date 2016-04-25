@@ -16,25 +16,26 @@ class FactionManager
         $this->plugin = $plugin;
 
         $factions = (new Config($plugin->getDataFolder() . "factions.yml", Config::YAML))->getAll();
-        if (!empty($factions)) $this->loadFactions($factions);
-        else $plugin->getLogger()->info("No factions to load.");
+        if (!empty($factions)){
+            $this->loadFactions($factions);
+            $this->getPlugin()->getLogger()->info("Loaded factions.");
+        } else {
+            $plugin->getLogger()->info("No factions to load.");
+        }
     }
 
     /**
      * @param array $factions
-     * @return bool|null|Faction
+     * @return null|Faction
      */
     private function loadFactions(array $factions)
     {
         foreach ($factions as $i => $name) {
             $faction = $this->getPlugin()->getDataProvider()->getFactionData($name);
-            if (Faction::isValidFactionData($faction)) {
-                return $this->loadFaction($name, $faction);
-            } else {
-                $this->plugin->getLogger()->warning("Failed to load plugin ");
+            if($this->loadFaction($name, $faction) instanceof Faction){
+                $this->getPlugin()->getLogger()->debug("Loaded faction '$name'");
             }
         }
-        return false;
     }
 
     public function getPlugin() : UltraFactions
@@ -45,15 +46,14 @@ class FactionManager
     /**
      * @param $name
      * @param array $faction
-     * @return bool|null|Faction
+     * @return null|Faction
      */
     private function loadFaction($name, array $faction)
     {
-        if (Faction::isValidFactionData($faction)) {
+
             $this->factions[strtolower($name)] = new Faction($name, $faction);
             return $this->getFaction($name);
-        }
-        return false;
+        return null;
     }
 
     /**
@@ -93,7 +93,7 @@ class FactionManager
     public function close()
     {
         $this->save();
-        $this->plugin->getLogger()->info("Closed FactionManager.");
+        $this->plugin->getLogger()->debug("Closed FactionManager.");
     }
 
     /**
@@ -103,12 +103,14 @@ class FactionManager
     public function save()
     {
         $l = $this->getPlugin()->getLogger();
-        $l->info("Saving factions...");
         $factions = [];
         foreach ($this->factions as $name => $f) {
+            $f->save();
+            $this->getPlugin()->getLogger()->debug("Saved faction's '{$f->getName()}' data.");
             $factions[] = $name;
         }
         @unlink($this->getPlugin()->getDataFolder() . "factions.yml");
         new Config($this->getPlugin()->getDataFolder() . "factions.yml", Config::YAML, $factions);
+        $this->getPlugin()->getLogger()->info("Saved factions data.");
     }
 }
