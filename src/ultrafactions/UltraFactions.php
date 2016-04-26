@@ -4,7 +4,7 @@ namespace ultrafactions;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\TextFormat as Text;
-
+use ultrafactions\command\FactionCommand;
 use ultrafactions\data\DataProvider;
 use ultrafactions\data\DefaultDataProvider;
 use ultrafactions\data\MySQLDataProvider;
@@ -14,6 +14,8 @@ use ultrafactions\handler\FactionEventListener;
 use ultrafactions\handler\PlayerEventListener;
 use ultrafactions\manager\FactionManager;
 use ultrafactions\manager\MemberManager;
+
+// Command
 
 class UltraFactions extends PluginBase
 {
@@ -54,12 +56,18 @@ class UltraFactions extends PluginBase
         }
 
         // Load managers
+        $this->getLogger()->debug("Loading managers...");
         $this->factionManager = new FactionManager($this);
         $this->memberManager = new MemberManager($this);
+        $this->getLogger()->debug("Managers loaded.");
 
         // Lets register some event listeners below
         $pm->registerEvents(new PlayerEventListener($this), $this);
         $pm->registerEvents(new FactionEventListener($this), $this);
+
+        // Function name sucks, It will be register only one command
+        $this->registerCommands();
+        $this->getLogger()->debug("Commands registered.");
 
         $this->getLogger()->info(Text::GREEN."Plugin loaded.");
     }
@@ -89,6 +97,13 @@ class UltraFactions extends PluginBase
         }
         $this->getLogger()->info("Data provider: " . $this->data->getType());
         return true;
+    }
+
+    private function registerCommands()
+    {
+        # TODO
+        $map = $this->getServer()->getCommandMap();
+        $map->register("UltraFactions", new FactionCommand($this));
     }
 
     // API Functions
@@ -126,6 +141,11 @@ class UltraFactions extends PluginBase
      */
     public function getFaction($name){
         return $this->factionManager->getFaction($name);
+    }
+
+    public function getPlayerFaction(Player $player)
+    {
+        return $this->getMember($player)->getFaction();
     }
 
     /**

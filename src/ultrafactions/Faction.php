@@ -46,22 +46,21 @@ class Faction
     {
         $this->name = $name;
 
-        if(isset($faction['']))
-    }
+        // Fill the gaps in the array
+        $bank = isset($data['bank']) ? $data['bank'] : self::$defaultData['bank'];
+        $home = isset($data['home']) ? $data['home'] : self::$defaultData['home'];
+        $allies = isset($data['allies']) ? $data['allies'] : self::$defaultData['allies'];
+        $enemies = isset($data['enemies']) ? $data['enemies'] : self::$defaultData['enemies'];
+        $members = isset($data['members']) ? $data['members'] : self::$defaultData['members'];
 
-    /**
-     * @param array $data
-     * @return bool
-     */
-    public static function isValidFactionData(array $data) : bool
-    {
-        foreach (self::$defaultData as $key => $value) {
-            if (!array_key_exists($key, $data)) {
-                echo "Key: " . $key . " was not found in array ";
-                var_dump($data);
-            }
-        }
-        return true;
+        // Convert some data to right instances
+        # TODO: Lazy + this isn't urgent :P
+
+        $this->bank = $bank;
+        $this->home = $home;
+        $this->allies = $allies;
+        $this->enemies = $enemies;
+        $this->members = $members;
     }
 
     public static function getDefaultData() : array
@@ -69,6 +68,11 @@ class Faction
         self::$defaultData;
     }
 
+    /**
+     * Should be called more than once.
+     *
+     * @param UltraFactions $p
+     */
     public static function setPlugin(UltraFactions $p)
     {
         self::$plugin = $p;
@@ -115,12 +119,12 @@ class Faction
     }
 
     /**
-     * @param Member $member
+     * @param $name
      * @return bool
      */
-    public function isMember(Member $member) : bool
+    public function isMember($name) : bool
     {
-        return $member->getFaction() === $this;
+        return in_array(strtolower($name), $this->members, true);
     }
 
     /**
