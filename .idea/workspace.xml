@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="84bdf3e2-9de7-4b8a-8e5e-7822ad1ada0b" name="Default" comment="Basic Faction and Member system, passed PHPStorm code analyze&#10;">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ultrafactions/manager/MemberManager.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ultrafactions/Faction.php" afterPath="$PROJECT_DIR$/src/ultrafactions/Faction.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ultrafactions/UltraFactions.php" afterPath="$PROJECT_DIR$/src/ultrafactions/UltraFactions.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ultrafactions/data/DataProvider.php" afterPath="$PROJECT_DIR$/src/ultrafactions/data/DataProvider.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ultrafactions/data/DefaultDataProvider.php" afterPath="$PROJECT_DIR$/src/ultrafactions/data/DefaultDataProvider.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ultrafactions/manager/FactionManager.php" afterPath="$PROJECT_DIR$/src/ultrafactions/manager/FactionManager.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dictionaries/primus.xml" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/plugin.yml" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="UltraFactions_v1.0.0.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -32,10 +29,22 @@
       <file leaf-file-name="UltraFactions.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ultrafactions/UltraFactions.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="392">
-              <caret line="63" column="60" selection-start-line="63" selection-start-column="60" selection-end-line="63" selection-end-column="60" />
+            <state relative-caret-position="1116">
+              <caret line="74" column="0" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
               <folding>
-                <element signature="e#32#54#0#PHP" expanded="true" />
+                <marker date="1461681237428" expanded="true" signature="563:575" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FactionCommand.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/ultrafactions/command/FactionCommand.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="390">
+              <caret line="115" column="26" selection-start-line="115" selection-start-column="26" selection-end-line="115" selection-end-column="26" />
+              <folding>
+                <element signature="e#123#154#0#PHP" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -44,7 +53,7 @@
       <file leaf-file-name="MemberManager.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ultrafactions/manager/MemberManager.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="326">
+            <state relative-caret-position="1296">
               <caret line="82" column="65" selection-start-line="82" selection-start-column="65" selection-end-line="82" selection-end-column="65" />
               <folding>
                 <element signature="e#123#159#0#PHP" expanded="true" />
@@ -53,11 +62,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Faction.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Faction.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ultrafactions/Faction.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="486">
-              <caret line="48" column="27" selection-start-line="48" selection-start-column="27" selection-end-line="48" selection-end-column="27" />
+            <state relative-caret-position="3690">
+              <caret line="205" column="47" selection-start-line="205" selection-start-column="47" selection-end-line="205" selection-end-column="47" />
               <folding />
             </state>
           </provider>
@@ -66,7 +75,7 @@
       <file leaf-file-name="FactionManager.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ultrafactions/manager/FactionManager.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="21">
+            <state relative-caret-position="594">
               <caret line="35" column="81" selection-start-line="35" selection-start-column="81" selection-end-line="35" selection-end-column="81" />
               <folding />
             </state>
@@ -78,26 +87,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="918">
               <caret line="56" column="30" selection-start-line="56" selection-start-column="30" selection-end-line="56" selection-end-column="30" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PocketCoreDataProvider.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ultrafactions/data/PocketCoreDataProvider.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="54">
-              <caret line="3" column="32" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="32" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MySQLDataProvider.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ultrafactions/data/MySQLDataProvider.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="54">
-              <caret line="3" column="32" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="32" />
               <folding />
             </state>
           </provider>
@@ -116,7 +105,7 @@
       <file leaf-file-name="DataProvider.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ultrafactions/data/DataProvider.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="468">
+            <state relative-caret-position="1134">
               <caret line="64" column="57" selection-start-line="64" selection-start-column="57" selection-end-line="64" selection-end-column="57" />
               <folding />
             </state>
@@ -126,7 +115,7 @@
       <file leaf-file-name="DefaultDataProvider.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ultrafactions/data/DefaultDataProvider.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="537">
+            <state relative-caret-position="1116">
               <caret line="63" column="37" selection-start-line="63" selection-start-column="37" selection-end-line="63" selection-end-column="37" />
               <folding />
             </state>
@@ -157,9 +146,10 @@
         <option value="$PROJECT_DIR$/src/ultrafactions/data/DataProvider.php" />
         <option value="$PROJECT_DIR$/src/ultrafactions/data/DefaultDataProvider.php" />
         <option value="$PROJECT_DIR$/src/ultrafactions/manager/MemberManager.php" />
-        <option value="$PROJECT_DIR$/src/ultrafactions/UltraFactions.php" />
         <option value="$PROJECT_DIR$/src/ultrafactions/manager/FactionManager.php" />
         <option value="$PROJECT_DIR$/src/ultrafactions/Faction.php" />
+        <option value="$PROJECT_DIR$/src/ultrafactions/UltraFactions.php" />
+        <option value="$PROJECT_DIR$/src/ultrafactions/command/FactionCommand.php" />
       </list>
     </option>
   </component>
@@ -206,7 +196,6 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -289,6 +278,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -354,6 +344,10 @@
       <workItem from="1461511605953" duration="790000" />
       <workItem from="1461599476333" duration="1852000" />
       <workItem from="1461601520875" duration="1724000" />
+      <workItem from="1461678140363" duration="2211000" />
+      <workItem from="1461680845155" duration="481000" />
+      <workItem from="1461845705954" duration="65000" />
+      <workItem from="1461854835305" duration="290000" />
     </task>
     <task id="LOCAL-00001" summary="Starting complete rewrite.">
       <created>1461331065264</created>
@@ -390,11 +384,18 @@
       <option name="project" value="LOCAL" />
       <updated>1461512203755</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Fixed minnor bugs. Added FactionCommand, UltraFactions::registerCommands() and few more debug messages.">
+      <created>1461681298136</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1461681298136</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="11205000" />
+    <option name="totallyTimeSpent" value="14252000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -409,13 +410,13 @@
     <frame x="0" y="0" width="1400" height="1017" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20103092" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21281296" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32779622" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32779622" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32779622" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2569956" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32779622" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32779622" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32890365" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -449,7 +450,8 @@
     <MESSAGE value="Basic Faction and Member system" />
     <MESSAGE value="Basic Faction and Member system, passed PHPStorm code analyze" />
     <MESSAGE value="Basic Faction and Member system, passed PHPStorm code analyze&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="Basic Faction and Member system, passed PHPStorm code analyze&#10;" />
+    <MESSAGE value="Fixed minnor bugs. Added FactionCommand, UltraFactions::registerCommands() and few more debug messages." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed minnor bugs. Added FactionCommand, UltraFactions::registerCommands() and few more debug messages." />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -461,22 +463,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/ultrafactions/data/MySQLDataProvider.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="3" column="32" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ultrafactions/data/SQLite3DataProvider.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="3" column="32" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/ultrafactions/data/DataProvider.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="432">
@@ -490,7 +476,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#32#54#0#PHP" expanded="true" />
+            <marker date="1461681237428" expanded="true" signature="563:575" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -507,9 +493,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
           <caret line="19" column="22" selection-start-line="19" selection-start-column="22" selection-end-line="19" selection-end-column="22" />
-          <folding>
-            <marker date="1461509598125" expanded="false" signature="103:105" placeholder="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -525,7 +508,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1656">
           <caret line="100" column="21" selection-start-line="100" selection-start-column="21" selection-end-line="100" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -541,7 +523,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
           <caret line="3" column="32" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="32" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -549,7 +530,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
           <caret line="3" column="32" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="32" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -574,7 +554,7 @@
         <state relative-caret-position="1008">
           <caret line="68" column="8" selection-start-line="68" selection-start-column="8" selection-end-line="68" selection-end-column="8" />
           <folding>
-            <element signature="e#32#54#0#PHP" expanded="true" />
+            <marker date="1461681237428" expanded="true" signature="563:575" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -591,9 +571,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
           <caret line="19" column="22" selection-start-line="19" selection-start-column="22" selection-end-line="19" selection-end-column="22" />
-          <folding>
-            <marker date="1461509598125" expanded="false" signature="103:105" placeholder="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -609,7 +586,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1674">
           <caret line="101" column="21" selection-start-line="101" selection-start-column="21" selection-end-line="101" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -625,7 +601,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
           <caret line="3" column="32" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="32" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -633,7 +608,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
           <caret line="3" column="32" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="32" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -658,7 +632,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#32#54#0#PHP" expanded="true" />
+            <marker date="1461681237428" expanded="true" signature="563:575" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -675,9 +649,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
           <caret line="17" column="22" selection-start-line="17" selection-start-column="22" selection-end-line="17" selection-end-column="22" />
-          <folding>
-            <marker date="1461509598125" expanded="false" signature="103:105" placeholder="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -693,7 +664,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1044">
           <caret line="66" column="38" selection-start-line="66" selection-start-column="38" selection-end-line="66" selection-end-column="38" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -709,7 +679,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="252">
           <caret line="16" column="21" selection-start-line="16" selection-start-column="21" selection-end-line="16" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -717,7 +686,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
           <caret line="22" column="20" selection-start-line="22" selection-start-column="20" selection-end-line="22" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -742,7 +710,7 @@
         <state relative-caret-position="900">
           <caret line="57" column="9" selection-start-line="57" selection-start-column="9" selection-end-line="57" selection-end-column="9" />
           <folding>
-            <element signature="e#32#54#0#PHP" expanded="true" />
+            <marker date="1461681237428" expanded="true" signature="563:575" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -768,7 +736,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#32#54#0#PHP" expanded="true" />
+            <marker date="1461681237428" expanded="true" signature="563:575" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -793,9 +761,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
           <caret line="19" column="22" selection-start-line="19" selection-start-column="22" selection-end-line="19" selection-end-column="22" />
-          <folding>
-            <marker date="1461509598125" expanded="false" signature="103:105" placeholder="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -803,7 +768,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1656">
           <caret line="100" column="21" selection-start-line="100" selection-start-column="21" selection-end-line="100" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -811,7 +775,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
           <caret line="3" column="32" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="32" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -819,14 +782,52 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
           <caret line="3" column="32" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugin.yml" />
+    <entry file="file://$PROJECT_DIR$/src/ultrafactions/UltraFactions.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1116">
+          <caret line="74" column="0" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
+          <folding>
+            <marker date="1461681237428" expanded="true" signature="563:575" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ultrafactions/command/FactionCommand.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="115" column="26" selection-start-line="115" selection-start-column="26" selection-end-line="115" selection-end-column="26" />
+          <folding>
+            <element signature="e#123#154#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ultrafactions/manager/MemberManager.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1296">
+          <caret line="82" column="65" selection-start-line="82" selection-start-column="65" selection-end-line="82" selection-end-column="65" />
+          <folding>
+            <element signature="e#123#159#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ultrafactions/Faction.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3690">
+          <caret line="205" column="47" selection-start-line="205" selection-start-column="47" selection-end-line="205" selection-end-column="47" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ultrafactions/data/SQLite3DataProvider.php">
+    <entry file="file://$PROJECT_DIR$/src/ultrafactions/manager/FactionManager.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="3" column="32" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="32" />
+        <state relative-caret-position="594">
+          <caret line="35" column="81" selection-start-line="35" selection-start-column="81" selection-end-line="35" selection-end-column="81" />
           <folding />
         </state>
       </provider>
@@ -839,9 +840,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/ultrafactions/data/SQLite3DataProvider.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="3" column="32" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/ultrafactions/data/DataProvider.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="468">
+        <state relative-caret-position="1134">
           <caret line="64" column="57" selection-start-line="64" selection-start-column="57" selection-end-line="64" selection-end-column="57" />
           <folding />
         </state>
@@ -849,44 +858,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ultrafactions/data/DefaultDataProvider.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="537">
+        <state relative-caret-position="1116">
           <caret line="63" column="37" selection-start-line="63" selection-start-column="37" selection-end-line="63" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ultrafactions/manager/MemberManager.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="326">
-          <caret line="82" column="65" selection-start-line="82" selection-start-column="65" selection-end-line="82" selection-end-column="65" />
-          <folding>
-            <element signature="e#123#159#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ultrafactions/UltraFactions.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="392">
-          <caret line="63" column="60" selection-start-line="63" selection-start-column="60" selection-end-line="63" selection-end-column="60" />
-          <folding>
-            <element signature="e#32#54#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ultrafactions/manager/FactionManager.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="21">
-          <caret line="35" column="81" selection-start-line="35" selection-start-column="81" selection-end-line="35" selection-end-column="81" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ultrafactions/Faction.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="486">
-          <caret line="48" column="27" selection-start-line="48" selection-start-column="27" selection-end-line="48" selection-end-column="27" />
           <folding />
         </state>
       </provider>

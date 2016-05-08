@@ -15,7 +15,7 @@ class FactionManager
     {
         $this->plugin = $plugin;
 
-        $factions = (new Config($plugin->getDataFolder() . "factions.yml", Config::YAML))->getAll();
+        $factions = (new Config($plugin->getDataFolder() . "factions.yml", Config::YAML))->get('factions');
         if (!empty($factions)){
             $this->loadFactions($factions);
             $this->getPlugin()->getLogger()->info("Loaded factions.");
@@ -33,7 +33,7 @@ class FactionManager
         foreach ($factions as $i => $name) {
             $faction = $this->getPlugin()->getDataProvider()->getFactionData($name);
             if($this->loadFaction($name, $faction) instanceof Faction){
-                $this->getPlugin()->getLogger()->debug("Loaded faction '$name'");
+                $this->getPlugin()->getLogger()->debug("#$i: Loaded faction '$name'");
             }
         }
     }
@@ -50,10 +50,14 @@ class FactionManager
      */
     private function loadFaction($name, array $faction)
     {
-
-            $this->factions[strtolower($name)] = new Faction($name, $faction);
-            return $this->getFaction($name);
-        return null;
+        try {
+            $f = new Faction($name, $faction);
+        } catch (\Exception $e) {
+            $this->getPlugin()->getLogger()->warning("Following error occurred while loading faction: ".$e->getMessage());
+            return null;
+        }
+        $this->factions[strtolower($f->getName())] = $f;
+        return $this->getFaction($name);
     }
 
     /**
@@ -88,6 +92,7 @@ class FactionManager
      */
     public function saveFaction(Faction $faction)
     {
+        $faction->save(); // What an useless function, isn't it? xD
     }
 
     public function close()
@@ -102,15 +107,16 @@ class FactionManager
      */
     public function save()
     {
-        $l = $this->getPlugin()->getLogger();
         $factions = [];
         foreach ($this->factions as $name => $f) {
             $f->save();
             $this->getPlugin()->getLogger()->debug("Saved faction's '{$f->getName()}' data.");
             $factions[] = $name;
         }
+        var_dump($factions);
+        var_dump($this->factions);
         @unlink($this->getPlugin()->getDataFolder() . "factions.yml");
-        new Config($this->getPlugin()->getDataFolder() . "factions.yml", Config::YAML, $factions);
+        new Config($this->getPlugin()->getDataFolder() . "factions.yml", Config::YAML, ['factions' => $factions]);
         $this->getPlugin()->getLogger()->info("Saved factions data.");
     }
 }

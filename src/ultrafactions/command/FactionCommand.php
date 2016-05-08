@@ -11,7 +11,10 @@ namespace ultrafactions\command;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\command\PluginIdentifiableCommand;
+use pocketmine\utils\TextFormat as Text;
+
 use ultrafactions\UltraFactions;
+use ultrafactions\Faction;
 
 class FactionCommand extends Command implements PluginIdentifiableCommand
 {
@@ -43,7 +46,7 @@ class FactionCommand extends Command implements PluginIdentifiableCommand
         }
 
         if (isset($args[0])) {
-            switch (strtolower($args[1])) {
+            switch (strtolower($args[0])) {
 
                 case 'create':
                     # TODO
@@ -51,6 +54,23 @@ class FactionCommand extends Command implements PluginIdentifiableCommand
 
                 case 'info':
                     # TODO
+                    if ( isset($args[1]) ){
+                        $faction = $this->getPlugin()->getFaction($args[1]);
+                        if($faction instanceof Faction){
+                            $sender->sendMessage("--- Showing Faction's {$faction->getName()} info ---");
+                            $sender->sendMessage("Name: ".$faction->getName());
+                            $sender->sendMessage("Created: ".date("d.m.Y H:i:s", $faction->getCreationTime()));
+                            $sender->sendMessage("Members: ".count($faction->getMembers()));
+                            $sender->sendMessage("Leader: ".$faction->getLeader());
+                            $sender->sendMessage("Bank: ".($sender->hasPermission("uf.command.info.bank") ? $faction->getBank() : "SECRET"));
+                            $sender->sendMessage("Home: ".($sender->hasPermission("uf.command.info.home") ? $faction->getHome() : "SECRET"));
+                            $sender->sendMessage("Plots: ".count($faction->getPlots()));
+                        } else {
+                            $sender->sendMessage("Faction not found");
+                        }
+                    } else {
+                        $sender->sendMessage("Usage: /faction info <faction>");
+                    }
                     break;
 
                 case 'claim':
@@ -94,6 +114,14 @@ class FactionCommand extends Command implements PluginIdentifiableCommand
 
                 case 'bank':
                     # TODO
+                    if($sender instanceof Player === false){
+                        $sender->sendMessage("Please run this command in-game");
+                        return true;
+                    }
+                    if( ($m = $this->getPlugin()->getMember($sender))->getFaction() instanceof Faction === false ){
+                        $sender->sendMessage("You must be in faction to use this command");
+                    }
+                    # Check if player is leader or co-leader
                     if (isset($args[1])) {
                         switch (strtolower($args[1])) {
 
@@ -102,6 +130,7 @@ class FactionCommand extends Command implements PluginIdentifiableCommand
                                 break;
 
                             case 'balance':
+
                                 # TODO
                                 break;
 
@@ -116,12 +145,42 @@ class FactionCommand extends Command implements PluginIdentifiableCommand
                     break;
 
                 case 'help':
+                    $pages = [
+                        1 => [
+                            # Page 1
+                            "create" => "Create new faction",
+                            "info" => "See Faction's information",
+                            "claim" => "Add this land to your faction",
+                            "invite" => "Invite new member to your faction",
+                            "accept" => "Accept invitation",
+                            "decline" => "Decline invitation",
+                            "kick" => "Kick member from your faction"
+                        ],
+                        2 => [
+                            "leave" => "Leave the clan you're in",
+                            "motd" => "Set faction's motd",
+                            "promote" => "Promote factions member",
+                            "demote" => "Demote factions member",
+                            "bank" => "Use your faction's money",
+                            "help" => "Displays this help page"
+                            # Page 2
+                        ]
+                    ];
+                        $page = isset($args[1]) ? $args[1] : 1;
+                        if(isset($pages[$page])){
+                            $sender->sendMessage("--- Showing help page $page of ".count($pages)." (/f help <page>) ---");
+                            foreach($pages[$page] as $cmd => $desc){
+                                $sender->sendMessage(" ".($sender->hasPermission("uf.command.".$cmd) ? Text::GREEN : Text::RED )."/".$cmd.": ".Text::RESET.$desc);
+                            }
+                        }
                     # TODO
                     break;
 
                 default:
                     $sender->sendMessage("Unknown sub-command. Use '/factions help' for help.");
             }
+        } else {
+            $sender->sendMessage("Undefined sub-command. Use '/factions help' for help");
         }
         return false; # Invalid usage
 

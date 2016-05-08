@@ -6,6 +6,11 @@ use pocketmine\level\Position;
 class Faction
 {
 
+    /*
+        name => is got from factions.yml
+        displayName => is from $data
+    */
+
     private static $plugin;
 
     private static $defaultData = [
@@ -13,9 +18,12 @@ class Faction
         "bank" => 0,
         "home" => null,
         "allies" => [],
-        "enemies" => []
-        # "power"
-        # "plots"
+        "enemies" => [],
+        "members" => [],
+        "power" => 0,
+        "plots" => [],
+        "created" => 0, # time()
+        "displayName" => null
     ];
 
     /**
@@ -26,6 +34,8 @@ class Faction
     protected $name = "";
     /** @var int $bank */
     protected $bank = 0;
+    /** @var int $power */
+    protected $power;
     /** @var Position $home */
     protected $home = null;
     /** @var array $allies */
@@ -34,10 +44,14 @@ class Faction
     protected $enemies = [];
     /** @var String[] $members */
     protected $members = [];
+    /** @var String[] $plots */
+    protected $plots = [];
+    /** @var int $created */
+    protected $created;
 
     /**
      * Faction constructor.
-     * Faction should adapt to invalid data given and use Faction::$defaultData
+     * Faction will adapt to invalid data given and use Faction::$defaultData
      *
      * @param $name
      * @param array $data
@@ -52,15 +66,25 @@ class Faction
         $allies = isset($data['allies']) ? $data['allies'] : self::$defaultData['allies'];
         $enemies = isset($data['enemies']) ? $data['enemies'] : self::$defaultData['enemies'];
         $members = isset($data['members']) ? $data['members'] : self::$defaultData['members'];
+        $power = isset($data['power']) ? $data['power'] : self::$defaultData['power'];
+        $plots = isset($data['plots']) ? $data['plots'] : self::$defaultData['plots'];
+        $created = isset($data['created']) ? $data['created'] : time();
 
         // Convert some data to right instances
         # TODO: Lazy + this isn't urgent :P
 
         $this->bank = $bank;
+        $this->power = $power;
         $this->home = $home;
         $this->allies = $allies;
         $this->enemies = $enemies;
         $this->members = $members;
+        $this->plots = $plots;
+        $this->created = $created;
+
+        if( $this->getLeader() === "" ){
+            throw new \Exception("Faction can not exist without leader");
+        }
     }
 
     public static function getDefaultData() : array
@@ -86,10 +110,15 @@ class Faction
         return $this->bank;
     }
 
+    public function getPower() : int
+    {
+        return $this->power;
+    }
+
     /**
-     * @return Position
+     * @return Position|null
      */
-    public function getHome() : Position
+    public function getHome()
     {
         return $this->home;
     }
@@ -116,6 +145,14 @@ class Faction
     public function getEnemies() : array
     {
         return $this->enemies;
+    }
+
+    /** 
+     * @return array
+     */
+    public function getPlots() : array
+    {
+        return $this->plots;
     }
 
     /**
@@ -156,6 +193,11 @@ class Faction
     public function getName() : string
     {
         return $this->name;
+    }
+
+    public function getCreationTime() : int
+    {
+        return $this->created;
     }
 
     /**
@@ -251,6 +293,8 @@ class Faction
     public function attachMember(Member $player) : bool
     {
         $this->members[strtolower($player->getName())] = $player;
+        $player->setFaction($this);
+        $player->setRank(Member::RANK_MEMBER);
         return true;
     }
 
@@ -259,4 +303,22 @@ class Faction
         unset($this->members[strtolower($player->getName())]);
         return true;
     }
+
+    public function getLeader() : string 
+    {
+        foreach($this->members as $member => $rank)
+        {
+            if($rank === Member::RANK_LEADER) return $member;
+        }     
+        return "";
+    }
+
+    public function setLeader(Member $member) : bool {
+        if($this->isMember($member)){
+            $this->leader = $member->getName();
+            $member->setRank(Member::RANK_LEADER);
+        }
+        return false;
+    }
+
 }
