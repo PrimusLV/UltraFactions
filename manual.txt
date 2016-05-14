@@ -1,0 +1,58 @@
+Manual:
+
+	> Creating and adding members to faction
+		- Faction and Member are chained together
+
+	To create new faction and add player to it, you must follow these instructions:
+		1) UltraFactions::createFaction($name, $data)
+			* $data must, contain 'displayName' key
+			* $data must, contain 'members' with leader member
+		2) Member::setRank(Member::RANK_LEADER);
+		3) Member::join(Faction)
+
+	Delete faction:
+		1) Faction::destroy();
+
+	To give leader to different player do:
+		1) Faction::newLeader(Member $member)
+			* Player must be attached to Faction before calling this
+
+	Demote player:
+		1) Member::demote()
+
+	Promote player:
+		1) Member::promote()
+
+	Kick player from faction:
+		1) Faction::kick(Member $member, $reason = '')
+
+
+	> Invitations
+		- When invitation is sent, delayed task
+		- Is scheduled to cancel it if it expires
+		- After time is passed task will
+		- notify Faction and Member about it 
+
+	Invite player to faction:
+		1) Member::sendInvitation(Faction $f)
+			* Invitation expires in 15 seconds
+
+	Accept invitation:
+		1) Member::acceptInvitation();
+			* Latest invitation will be accepted
+
+	Decline:
+		2) Member::declineInvitation();
+			* Latest invitation will be declined
+
+
+	> Claiming and unclaiming plots
+			- When claiming plots functions will check
+			- if plot isn't claimed already or/and 
+			- isn't in protected world
+
+	Claim:
+		1) Faction::claimPlot(FullChunk $chunk)
+
+	Unclaim:
+		1) Faction::unclaimPlot(FullChunk $chunk)

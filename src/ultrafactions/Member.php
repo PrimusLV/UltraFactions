@@ -53,6 +53,8 @@ class Member
             } else {
                 $this->faction = null;
             }
+        } else {
+            $this->faction = null;
         }
         $this->power = $power;
 
@@ -65,7 +67,7 @@ class Member
 
     public static function setPlugin(UltraFactions $p)
     {
-        self::$plugin = $p;
+        if(!self::$plugin) self::$plugin = $p;
     }
 
     /**

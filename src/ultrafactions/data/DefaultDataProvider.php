@@ -50,10 +50,18 @@ class DefaultDataProvider extends DataProvider
         return new Config(self::memberFile($name), Config::YAML, $data);
     }
 
+    public function deleteFactionFile($name){
+        @unlink(self::factionFile($name));
+    }
+
+    public function deleteMemberFile($name){
+        @unlink(self::memberFile($name));
+    }
+
     protected function init() : bool
     {
         # Init function for YAML data provider
-        # This class will use two files factions.yml and members.yml
+        # This class will use two more files: factions.yml and members.yml
         @mkdir(self::$factionFolder);
         @mkdir(self::$memberFolder);
 

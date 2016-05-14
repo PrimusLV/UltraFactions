@@ -32,6 +32,10 @@ class FactionManager
     {
         foreach ($factions as $i => $name) {
             $faction = $this->getPlugin()->getDataProvider()->getFactionData($name);
+            if(empty($faction)){
+                $this->getPlugin()->getDataProvider()->deleteFactionFile($name);
+                return;
+            }
             if($this->loadFaction($name, $faction) instanceof Faction){
                 $this->getPlugin()->getLogger()->debug("#$i: Loaded faction '$name'");
             }
@@ -57,7 +61,7 @@ class FactionManager
             return null;
         }
         $this->factions[strtolower($f->getName())] = $f;
-        return $this->getFaction($name);
+        return $f;
     }
 
     /**
@@ -78,6 +82,16 @@ class FactionManager
     public function addFaction(Faction $faction)
     {
         $this->factions[strtolower($faction->getName())] = $faction;
+    }
+
+    /**
+     * @param string $name
+     * @param array $data
+     * @return null|Faction
+     */
+    public function createFaction($name, array $data)
+    {
+        return $this->loadFaction($name, $data);
     }
 
     /**
@@ -113,8 +127,6 @@ class FactionManager
             $this->getPlugin()->getLogger()->debug("Saved faction's '{$f->getName()}' data.");
             $factions[] = $name;
         }
-        var_dump($factions);
-        var_dump($this->factions);
         @unlink($this->getPlugin()->getDataFolder() . "factions.yml");
         new Config($this->getPlugin()->getDataFolder() . "factions.yml", Config::YAML, ['factions' => $factions]);
         $this->getPlugin()->getLogger()->info("Saved factions data.");

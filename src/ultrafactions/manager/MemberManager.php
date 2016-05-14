@@ -47,7 +47,7 @@ class MemberManager
      * @param Player $player
      * @return bool
      */
-    public function registerMember(Player $player)
+    public function registerPlayer(Player $player)
     {
             $memberD = $this->getPlugin()->getDataProvider()->getMemberData(DataProvider::playerName($player));
             $power = isset($memberD['power']) ? $memberD['power'] : 0;
@@ -64,7 +64,7 @@ class MemberManager
                     $this->getPlugin()->getLogger()->warning("Following error occurred while registering player: " . $e->getMessage());
                 }
             }
-            $m = new Member($player, $power, $stats, $faction);
+            $m = new Member($player, $faction, $power, $stats);
             $this->members[strtolower($player->getName())] = $m;
             return $m;
     }

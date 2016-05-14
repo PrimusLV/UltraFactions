@@ -12,9 +12,12 @@ use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\command\PluginIdentifiableCommand;
 use pocketmine\utils\TextFormat as Text;
+use pocketmine\Player;
 
 use ultrafactions\UltraFactions;
 use ultrafactions\Faction;
+use ultrafactions\Member;
+
 
 class FactionCommand extends Command implements PluginIdentifiableCommand
 {
@@ -49,7 +52,58 @@ class FactionCommand extends Command implements PluginIdentifiableCommand
             switch (strtolower($args[0])) {
 
                 case 'create':
-                    # TODO
+                    if(!$sender instanceof Player){
+                        $sender->sendMessage("Please run this command in-game");
+                        return true;
+                    }
+                    if(isset($args[1])){
+                        if($this->getPlugin()->getFaction($args[1]) instanceof Faction){
+                            $sender->sendMessage("Faction already exists");
+                            return true;
+                        }
+                    # Check if player has enough money
+                    $price = $this->getPlugin()->getPrice('faction.create');
+                    $money = $this->getPlugin()->getEconomy()->getMoney($sender);
+                    if($price != 0){
+                        if($price > $money){
+                            $sender->sendMessage("You don't have enough money");
+                            return true;
+                        }
+                    }
+                    # Filter name    
+                    if(!ctype_alnum($args[1])){
+                        $sender->sendMessage("Only numbers and letters allowed");
+                        return true;
+                    }
+                    if(strlen($args[1]) > 8){
+                        $sender->sendMessage("Name is too long");
+                        return true;
+                    } elseif (strlen($args[1]) < 3){
+                        $sender->sendMessage("Name is too short");
+                        return true;
+                    }
+                    /*
+                    if($this->getPlugin()->isNameBanned($args[1])){
+                        # TODO
+                    }
+                    */
+
+                    # Create faction
+                    $data = [
+                        'displayName' => $args[1],
+                        'members' => [$sender->getName() => Member::RANK_LEADER],
+                    ];
+                    if(($f = $this->getPlugin()->createFaction($args[1], $data)) instanceof Faction){
+                        $member = $this->getPlugin()->getMember($sender);
+                        $member->join($f);
+                        $sender->sendMessage("Faction created");
+                    } else {
+                        $sender->sendMessage("Failed to create faction");
+                    }
+
+                    } else {
+                        $this->sendUsage($sender, 'create');
+                    }
                     break;
 
                 case 'info':

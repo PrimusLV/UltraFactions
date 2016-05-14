@@ -14,6 +14,7 @@ use ultrafactions\handler\FactionEventListener;
 use ultrafactions\handler\PlayerEventListener;
 use ultrafactions\manager\FactionManager;
 use ultrafactions\manager\MemberManager;
+use ultrafactions\economy\Economy;
 
 // Command
 
@@ -24,6 +25,11 @@ class UltraFactions extends PluginBase
     protected $factionManager;
     /** @var MemberManager $memberManager */
     protected $memberManager;
+    /** @var Economy $economy */
+    protected $economy;
+
+    /** @var array $prices */
+    protected $prices;
 
     /** @var DataProvider */
     private $data = null;
@@ -54,6 +60,17 @@ class UltraFactions extends PluginBase
             $this->getLogger()->critical("Following error occurred while initializing data provider: " . $e->getMessage());
             return; // Don't execute any furthermore code or it may cause other errors
         }
+        $this->economy = new Economy($this, $this->getConfig()->get('economy')['preffer']);
+        if(!$this->economy->isLoaded()){
+            $this->getLogger()->warning("No Economy plugin loaded!");
+            $this->getServer()->getPluginManager()->disablePlugin($this);
+            return;
+        }
+
+        // Load prices
+        $prices = $this->getConfig()->get('prices');
+        $this->prices = $prices;
+        $this->getLogger()->info("Prices loaded.");
 
         // Load managers
         $this->getLogger()->debug("Loading managers...");
@@ -72,13 +89,29 @@ class UltraFactions extends PluginBase
         $this->getLogger()->info(Text::GREEN."Plugin loaded.");
     }
 
+    public function onDisable()
+    {
+        # Save all factions
+        if($this->factionManager != null) $this->factionManager->close();
+        # Save members
+        if($this->factionManager != null) $this->memberManager->close();
+        # And close connections or so on data provider class
+        if($this->data != null) $this->data->close();
+
+        $this->getLogger()->info(Text::LIGHT_PURPLE."Plugin disabled.");
+    }
+
     private function loadDataProvider()
     {
-        $providerType = $this->getConfig()->get('data-provider');
+        $providerType = $this->getConfig()->get('data');
         if (!$providerType) {
-            throw new \Exception('Can not receive \'data-provider\' from config', 0);
+            throw new \Exception('Can not receive \'data\' from config', 0);
+            $providerType = $providerType['provider'];
         }
-        switch (strtolower($providerType)) {
+        if(!isset($providerType['provider'])){
+            throw new \Exception('Unset \'provider\' under \'data\' key');
+        }
+        switch (strtolower($providerType['provider'])) {
             case 'yaml': # YAML is default data provider
             default:
                 $this->data = new DefaultDataProvider($this);
@@ -101,24 +134,11 @@ class UltraFactions extends PluginBase
 
     private function registerCommands()
     {
-        # TODO
         $map = $this->getServer()->getCommandMap();
         $map->register("UltraFactions", new FactionCommand($this));
     }
 
     // API Functions
-
-    public function onDisable()
-    {
-        # Save all factions
-        $this->factionManager->close();
-        # Save members
-        $this->memberManager->close();
-        # And close connections or so on data provider class
-        $this->data->close();
-
-        $this->getLogger()->info(Text::LIGHT_PURPLE."Plugin disabled.");
-    }
 
     public function getDataProvider() : DataProvider
     {
@@ -131,6 +151,13 @@ class UltraFactions extends PluginBase
     public function getFactionManager() : FactionManager
     {
         return $this->factionManager;
+    }
+
+    /**
+     * @return Economy
+     */
+    public function getEconomy() : Economy {
+        return $this->economy;
     }
 
     /**
@@ -158,12 +185,39 @@ class UltraFactions extends PluginBase
         return $this->memberManager->getMember($player);
     }
 
+    public function registerPlayer(Player $player){
+        return $this->memberManager->registerPlayer($player);
+    }
+
     /**
      * @param Player $player
      * @return bool
      */
     public function isInFaction(Player $player) : bool {
         return $this->getMember($player)->getFaction() instanceof Faction === true;
+    }
+
+    public function createFaction($name, array $data){
+        return $this->getFactionManager()->createFaction($name, $data);
+    }
+
+    /**
+     * @param string $node
+     * @return int
+     */
+    public function getPrice($node) : int {
+        $keys = explode('.', $node);
+        $i = 0;
+        if(isset($this->prices[$keys[$i]])){
+            $prices = $this->prices[$keys[$i]];
+            while(is_array($prices)){
+                $i++;
+                $prices = isset($prices[$keys[$i]]) ? $prices[$keys[$i]] : 0;
+            }
+            return $prices;
+        } else {
+            return 0;
+        }
     }
 
 

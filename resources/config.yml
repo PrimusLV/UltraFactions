@@ -1,3 +1,22 @@
 ---
-data-provider: 'pc'
+data:
+ provider: 'default'
+ settings:
+  mysql:
+   user: root
+   host: localhost
+   db: UltraFactions
+   password: mysqlpassword
+  yaml: []
+  sqlite: []
+  pc: []
+economy:
+ preffer: 'EconomyAPI'
+
+# faction.create === 'prices' => ['faction' => ['create' => 1000]]
+prices:
+ faction:
+  create: 1000
+  claim: 500
+  sethome: 100
 ...

@@ -7,14 +7,14 @@ class Faction
 {
 
     /*
-        name => is got from factions.yml
-        displayName => is from $data
+    *    name => is got from factions.yml
+    *    displayName => is from $data
     */
 
     private static $plugin;
 
     private static $defaultData = [
-        "name" => null,
+        "name" => "",
         "bank" => 0,
         "home" => null,
         "allies" => [],
@@ -23,7 +23,7 @@ class Faction
         "power" => 0,
         "plots" => [],
         "created" => 0, # time()
-        "displayName" => null
+        "displayName" => ""
     ];
 
     /**
@@ -32,6 +32,8 @@ class Faction
 
     /** @var string $name */
     protected $name = "";
+    /** @var string $displayName */
+    protected $displayName = "";
     /** @var int $bank */
     protected $bank = 0;
     /** @var int $power */
@@ -69,6 +71,7 @@ class Faction
         $power = isset($data['power']) ? $data['power'] : self::$defaultData['power'];
         $plots = isset($data['plots']) ? $data['plots'] : self::$defaultData['plots'];
         $created = isset($data['created']) ? $data['created'] : time();
+        $displayName = isset($data['displayName']) ? $data['displayName'] : self::$defaultData['displayName'];
 
         // Convert some data to right instances
         # TODO: Lazy + this isn't urgent :P
@@ -81,7 +84,11 @@ class Faction
         $this->members = $members;
         $this->plots = $plots;
         $this->created = $created;
+        $this->displayName = $displayName;
 
+        if( $this->getDisplayName() === "" ){ # Of course I could do it above but what would be the difference?
+            throw new \Exception("Invalid display name");
+        }
         if( $this->getLeader() === "" ){
             throw new \Exception("Faction can not exist without leader");
         }
@@ -93,13 +100,13 @@ class Faction
     }
 
     /**
-     * Should be called more than once.
+     * Should be not called more than once.
      *
      * @param UltraFactions $p
      */
     public static function setPlugin(UltraFactions $p)
     {
-        self::$plugin = $p;
+        if(!self::$plugin) self::$plugin = $p;
     }
 
     /**
@@ -193,6 +200,11 @@ class Faction
     public function getName() : string
     {
         return $this->name;
+    }
+
+    public function getDisplayName() : string
+    {
+        return $this->displayName;
     }
 
     public function getCreationTime() : int
@@ -290,11 +302,11 @@ class Faction
         return $d;
     }
 
-    public function attachMember(Member $player) : bool
+    public function attachMember(Member $player, $rank = Member::RANK_MEMBER) : bool
     {
         $this->members[strtolower($player->getName())] = $player;
         $player->setFaction($this);
-        $player->setRank(Member::RANK_MEMBER);
+        $player->setRank($rank);
         return true;
     }
 
@@ -319,6 +331,25 @@ class Faction
             $member->setRank(Member::RANK_LEADER);
         }
         return false;
+    }
+
+    public function newLeader(Member $member){
+        # TODO
+    }
+
+    // Plots
+
+    public function claimPlot($chunk){
+        var_dump($chunk);
+        # TODO
+    }
+
+    public function unclaimPlot($chunk){
+        # TODO
+    }
+
+    public function isPlotOwner($plot){
+        # TODO
     }
 
 }
