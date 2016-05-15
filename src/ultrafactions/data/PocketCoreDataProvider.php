@@ -31,9 +31,17 @@ class PocketCoreDataProvider extends DataProvider
 
     }
 
+    public function get($key)
+    {
+    }
+
+    public function save($key, array $data)
+    {
+    }
+
     protected function init() : bool
     {
-        throw new \Exception("PocketCore is currently under development and is unavaliable");
+        throw new \Exception("PocketCore is currently under development and is unavailable");
         #return true;
     }
 

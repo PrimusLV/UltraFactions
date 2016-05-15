@@ -11,12 +11,11 @@ namespace ultrafactions\command;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\command\PluginIdentifiableCommand;
-use pocketmine\utils\TextFormat as Text;
 use pocketmine\Player;
-
-use ultrafactions\UltraFactions;
+use pocketmine\utils\TextFormat as Text;
 use ultrafactions\Faction;
 use ultrafactions\Member;
+use ultrafactions\UltraFactions;
 
 
 class FactionCommand extends Command implements PluginIdentifiableCommand
@@ -54,6 +53,11 @@ class FactionCommand extends Command implements PluginIdentifiableCommand
                 case 'create':
                     if(!$sender instanceof Player){
                         $sender->sendMessage("Please run this command in-game");
+                        return true;
+                    }
+                    $member = $this->getPlugin()->getMemberManager()->getMember($sender, true);
+                    if ($member->isInFaction()) {
+                        $member->getPlayer()->sendMessage("You are already in faction!"); # BadBoy
                         return true;
                     }
                     if(isset($args[1])){
@@ -94,7 +98,6 @@ class FactionCommand extends Command implements PluginIdentifiableCommand
                         'members' => [$sender->getName() => Member::RANK_LEADER],
                     ];
                     if(($f = $this->getPlugin()->createFaction($args[1], $data)) instanceof Faction){
-                        $member = $this->getPlugin()->getMember($sender);
                         $member->join($f);
                         $sender->sendMessage("Faction created");
                     } else {
@@ -172,10 +175,7 @@ class FactionCommand extends Command implements PluginIdentifiableCommand
                         $sender->sendMessage("Please run this command in-game");
                         return true;
                     }
-                    if( ($m = $this->getPlugin()->getMember($sender))->getFaction() instanceof Faction === false ){
-                        $sender->sendMessage("You must be in faction to use this command");
-                    }
-                    # Check if player is leader or co-leader
+                    # TODO: Check if player is leader or co-leader
                     if (isset($args[1])) {
                         switch (strtolower($args[1])) {
 

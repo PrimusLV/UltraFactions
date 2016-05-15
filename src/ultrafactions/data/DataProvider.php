@@ -50,9 +50,12 @@ abstract class DataProvider
 
     public abstract function setMemberData($name, array $data, $append = true);
 
-    public function getType() : string
+    public abstract function get($key);
+
+    public function close()
     {
-        return $this->type;
+        # Call parent function to display this message :P
+        $this->getPlugin()->getLogger()->info("Closed {$this->getType()} data provider.");
     }
 
     public function getPlugin() : UltraFactions
@@ -60,10 +63,9 @@ abstract class DataProvider
         return $this->plugin;
     }
 
-    public function close()
+    public function getType() : string
     {
-        # Call parent function to display this message :P
-        $this->getPlugin()->getLogger()->info("Closed {$this->getType()} data provider.");
+        return $this->type;
     }
 
 }

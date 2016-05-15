@@ -8,37 +8,37 @@
 
 namespace ultrafactions\manager;
 
-use ultrafactions\data\DataProvider;
-use ultrafactions\UltraFactions;
-use ultrafactions\Member;
-use ultrafactions\Faction;
-
 use pocketmine\Player;
+use ultrafactions\data\DataProvider;
+use ultrafactions\Faction;
+use ultrafactions\Member;
 
-class MemberManager
+class MemberManager extends Manager
 {
-
-    /** @var UltraFactions $plugin */
-    private $plugin;
 
     /** @var Member[] $members */
     private $members = [];
 
-    public function __construct(UltraFactions $plugin){
-        $this->plugin = $plugin;
+    public function __construct()
+    {
+        $this->init();
     }
 
-    public function getMember(Player $player) : Member {
-        # TODO
+    protected function init() : bool
+    {
+        return parent::init();
+    }
+
+    public function getMember(Player $player, $register = false)
+    {
         if(isset($this->members[strtolower($player->getName())])){
             return $this->members[strtolower($player->getName())];
         } else {
-            return $this->registerMember($player);
+            if ($register) {
+                $this->registerPlayer($player);
+            }
         }
-    }
-
-    public function loadMember($name){
-        # TODO
+        return null;
     }
 
     /**
@@ -58,7 +58,7 @@ class MemberManager
                     $faction = $this->getPlugin()->getFaction($memberD['faction']);
                     if (!$faction INSTANCEOF Faction) {
                         $faction = null;
-                        throw new \Exception("Member is in invalid/unloaded faction");
+                        throw new \Exception("Member is in invalid faction");
                     }
                 } catch (\Exception $e) {
                     $this->getPlugin()->getLogger()->warning("Following error occurred while registering player: " . $e->getMessage());
@@ -69,12 +69,22 @@ class MemberManager
             return $m;
     }
 
+    public function isMember(Player $player) : bool
+    {
+        foreach ($this->getPlugin()->getFactionManager()->getAll() as $faction) {
+            if ($faction->isMember($player->getName())) return true;
+        }
+        return false;
+    }
+
     public function getMembers() : array {
         return $this->members;
     }
 
-    public function getPlugin() : UltraFactions {
-        return $this->plugin;
+    public function close()
+    {
+        $this->save();
+        $this->getPlugin()->getLogger()->debug("Closed MemberManager.");
     }
 
     public function save(){
@@ -85,9 +95,8 @@ class MemberManager
             $this->getPlugin()->getLogger()->info("Saved members data.");
     }
 
-    public function close()
+    public function getAll() : array 
     {
-        $this->save();
-        $this->getPlugin()->getLogger()->debug("Closed MemberManager.");
+        return $this->members;
     }
 }

@@ -46,7 +46,7 @@ Manual:
 			* Latest invitation will be declined
 
 
-	> Claiming and unclaiming plots
+	> Claiming and un-claiming plots
 			- When claiming plots functions will check
 			- if plot isn't claimed already or/and 
 			- isn't in protected world

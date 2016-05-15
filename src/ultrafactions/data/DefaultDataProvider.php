@@ -6,9 +6,10 @@ use ultrafactions\UltraFactions;
 
 class DefaultDataProvider extends DataProvider
 {
-
     private static $factionFolder = "";
     private static $memberFolder = "";
+    /** @var  array $plots */
+    private $plots;
 
     public function __construct(UltraFactions $plugin)
     {
@@ -58,6 +59,35 @@ class DefaultDataProvider extends DataProvider
         @unlink(self::memberFile($name));
     }
 
+    public function get($key)
+    {
+        switch ($key) {
+            case 'plots':
+                return $this->plots;
+                break;
+            default:
+                break;
+        }
+        return null;
+    }
+
+    public function save($key, array $data)
+    {
+        switch ($key) {
+            case 'plots':
+                new Config($this->getPlugin()->getDataFolder() . "plots.yml", Config::YAML, $data);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public function close()
+    {
+        # There is nothing to do here
+        parent::close();
+    }
+
     protected function init() : bool
     {
         # Init function for YAML data provider
@@ -65,12 +95,9 @@ class DefaultDataProvider extends DataProvider
         @mkdir(self::$factionFolder);
         @mkdir(self::$memberFolder);
 
-        return true;
-    }
+        $this->plots = (new Config($this->getPlugin()->getDataFolder() . "plots.yml", Config::YAML))->getAll();
 
-    public function close(){
-        # There is nothing to do here
-        parent::close();
+        return true;
     }
 
 }

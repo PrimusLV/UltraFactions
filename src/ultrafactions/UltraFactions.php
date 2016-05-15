@@ -1,7 +1,6 @@
 <?php
 namespace ultrafactions;
 
-use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\TextFormat as Text;
 use ultrafactions\command\FactionCommand;
@@ -10,11 +9,13 @@ use ultrafactions\data\DefaultDataProvider;
 use ultrafactions\data\MySQLDataProvider;
 use ultrafactions\data\PocketCoreDataProvider;
 use ultrafactions\data\SQLite3DataProvider;
+use ultrafactions\economy\Economy;
 use ultrafactions\handler\FactionEventListener;
 use ultrafactions\handler\PlayerEventListener;
 use ultrafactions\manager\FactionManager;
+use ultrafactions\manager\Manager;
 use ultrafactions\manager\MemberManager;
-use ultrafactions\economy\Economy;
+use ultrafactions\manager\PlotManager;
 
 // Command
 
@@ -25,6 +26,8 @@ class UltraFactions extends PluginBase
     protected $factionManager;
     /** @var MemberManager $memberManager */
     protected $memberManager;
+    /** @var  PlotManager $plotManager */
+    protected $plotManager;
     /** @var Economy $economy */
     protected $economy;
 
@@ -39,6 +42,7 @@ class UltraFactions extends PluginBase
         @mkdir($this->getDataFolder());
         $this->saveDefaultConfig();
 
+        Manager::setPlugin($this);
         Member::setPlugin($this);
         Faction::setPlugin($this);
     }
@@ -60,7 +64,7 @@ class UltraFactions extends PluginBase
             $this->getLogger()->critical("Following error occurred while initializing data provider: " . $e->getMessage());
             return; // Don't execute any furthermore code or it may cause other errors
         }
-        $this->economy = new Economy($this, $this->getConfig()->get('economy')['preffer']);
+        $this->economy = new Economy($this, $this->getConfig()->get('economy')['prefer']);
         if(!$this->economy->isLoaded()){
             $this->getLogger()->warning("No Economy plugin loaded!");
             $this->getServer()->getPluginManager()->disablePlugin($this);
@@ -76,6 +80,7 @@ class UltraFactions extends PluginBase
         $this->getLogger()->debug("Loading managers...");
         $this->factionManager = new FactionManager($this);
         $this->memberManager = new MemberManager($this);
+        $this->plotManager = new PlotManager($this);
         $this->getLogger()->debug("Managers loaded.");
 
         // Lets register some event listeners below
@@ -89,24 +94,11 @@ class UltraFactions extends PluginBase
         $this->getLogger()->info(Text::GREEN."Plugin loaded.");
     }
 
-    public function onDisable()
-    {
-        # Save all factions
-        if($this->factionManager != null) $this->factionManager->close();
-        # Save members
-        if($this->factionManager != null) $this->memberManager->close();
-        # And close connections or so on data provider class
-        if($this->data != null) $this->data->close();
-
-        $this->getLogger()->info(Text::LIGHT_PURPLE."Plugin disabled.");
-    }
-
     private function loadDataProvider()
     {
         $providerType = $this->getConfig()->get('data');
         if (!$providerType) {
             throw new \Exception('Can not receive \'data\' from config', 0);
-            $providerType = $providerType['provider'];
         }
         if(!isset($providerType['provider'])){
             throw new \Exception('Unset \'provider\' under \'data\' key');
@@ -138,6 +130,18 @@ class UltraFactions extends PluginBase
         $map->register("UltraFactions", new FactionCommand($this));
     }
 
+    public function onDisable()
+    {
+        # Save all factions
+        if ($this->factionManager != null) $this->factionManager->close();
+        # Save members
+        if ($this->factionManager != null) $this->memberManager->close();
+        # And close connections or so on data provider class
+        if ($this->data != null) $this->data->close();
+
+        $this->getLogger()->info(Text::LIGHT_PURPLE . "Plugin disabled.");
+    }
+
     // API Functions
 
     public function getDataProvider() : DataProvider
@@ -154,51 +158,26 @@ class UltraFactions extends PluginBase
     }
 
     /**
+     * @return MemberManager
+     */
+    public function getMemberManager()
+    {
+        return $this->memberManager;
+    }
+
+    /**
+     * @return PlotManager
+     */
+    public function getPlotManager()
+    {
+        return $this->plotManager;
+    }
+
+    /**
      * @return Economy
      */
     public function getEconomy() : Economy {
         return $this->economy;
-    }
-
-    /**
-     * Shortcut for FactionManager::getFaction()
-     *
-     * @param $name
-     * @return null|Faction
-     */
-    public function getFaction($name){
-        return $this->factionManager->getFaction($name);
-    }
-
-    public function getPlayerFaction(Player $player)
-    {
-        return $this->getMember($player)->getFaction();
-    }
-
-    /**
-     * Shortcut for MemberManager::getFaction()
-     *
-     * @param Player $player
-     * @return Member
-     */
-    public function getMember(Player $player){
-        return $this->memberManager->getMember($player);
-    }
-
-    public function registerPlayer(Player $player){
-        return $this->memberManager->registerPlayer($player);
-    }
-
-    /**
-     * @param Player $player
-     * @return bool
-     */
-    public function isInFaction(Player $player) : bool {
-        return $this->getMember($player)->getFaction() instanceof Faction === true;
-    }
-
-    public function createFaction($name, array $data){
-        return $this->getFactionManager()->createFaction($name, $data);
     }
 
     /**

@@ -31,6 +31,14 @@ class MySQLDataProvider extends DataProvider
 
     }
 
+    public function get($key)
+    {
+    }
+
+    public function save($key, array $data)
+    {
+    }
+
     protected function init() : bool
     {
         return true;

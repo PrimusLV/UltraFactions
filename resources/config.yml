@@ -11,7 +11,7 @@ data:
   sqlite: []
   pc: []
 economy:
- preffer: 'EconomyAPI'
+ prefer: 'EconomyAPI'
 
 # faction.create === 'prices' => ['faction' => ['create' => 1000]]
 prices:
@@ -19,4 +19,6 @@ prices:
   create: 1000
   claim: 500
   sethome: 100
+
+chat-format: "[{RANK}][{FACTION}] {PLAYER}: {MESSAGE}"
 ...

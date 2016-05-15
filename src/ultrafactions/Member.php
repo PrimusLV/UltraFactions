@@ -23,10 +23,6 @@ class Member
 
     private static $defaultData = [
         "power" => 0,
-        "stats" => [
-            "kills" => 0,
-            "deaths" => 0,
-        ],
         "faction" => null,
         "rank" => Member::RANK_MEMBER
     ];
@@ -37,7 +33,7 @@ class Member
     protected $faction;
     protected $player;
 
-    public function __construct(Player $player, $faction, $power = 0, array $stats)
+    public function __construct(Player $player, $faction, $power = 0)
     {
         $this->player = $player;
         if (empty($stats)) {
@@ -48,7 +44,7 @@ class Member
         if ($faction != null) {
             if ($faction instanceof Faction) {
                 $this->faction = $faction;
-            } elseif (($f = $this->getPlugin()->getFactionManager()->getFaction($faction)) instanceof Faction) {
+            } elseif (($f = $this->getPlugin()->getFactionManager()->getFactionByName($faction)) instanceof Faction) {
                 $this->faction = $f;
             } else {
                 $this->faction = null;
@@ -60,14 +56,14 @@ class Member
 
     }
 
-    public function getPlugin() : UltraFactions
+    private function getPlugin() : UltraFactions
     {
         return self::$plugin;
     }
 
     public static function setPlugin(UltraFactions $p)
     {
-        if(!self::$plugin) self::$plugin = $p;
+        if (!self::$plugin) self::$plugin = $p;
     }
 
     /**
@@ -76,12 +72,6 @@ class Member
     public function getFaction()
     {
         return $this->faction;
-    }
-
-    public function setFaction(Faction $faction)
-    {
-        $this->faction = $faction;
-        $faction->update();
     }
 
     /**
@@ -99,15 +89,19 @@ class Member
 
     public function join(Faction $faction)
     {
-        // Call event
+        // TODO: Call event
         if ($this->faction === $faction or $this->isInFaction()) return false;
-        return $faction->attachMember($this);
+        $rank = $faction->attachMember($this);
+        if ($rank === false) return false;
+        $this->faction = $faction;
+        $this->rank = $rank;
+        return true;
     }
 
     public function isInFaction()
     {
         if ($this->faction instanceof Faction) {
-            return $this->faction->isMember($this);
+            return true;
         }
         return false;
     }
@@ -140,9 +134,16 @@ class Member
         return $nData;
     }
 
+    // Integration with plugin
+
     public function getRank() : int
     {
         return $this->rank;
+    }
+
+    public function setRank($rank)
+    {
+        $this->rank = $rank;
     }
 
 }

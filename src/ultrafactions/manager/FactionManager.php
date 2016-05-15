@@ -5,7 +5,7 @@ use pocketmine\utils\Config;
 use ultrafactions\Faction;
 use ultrafactions\UltraFactions;
 
-class FactionManager
+class FactionManager extends Manager
 {
 
     /** @var Faction[] $factions */
@@ -13,15 +13,21 @@ class FactionManager
 
     public function __construct(UltraFactions $plugin)
     {
-        $this->plugin = $plugin;
+        $this->init();
+    }
 
-        $factions = (new Config($plugin->getDataFolder() . "factions.yml", Config::YAML))->get('factions');
+    protected function init() : bool
+    {
+
+        $factions = (new Config($this->getPlugin()->getDataFolder() . "factions.yml", Config::YAML))->get('factions');
         if (!empty($factions)){
             $this->loadFactions($factions);
             $this->getPlugin()->getLogger()->info("Loaded factions.");
         } else {
-            $plugin->getLogger()->info("No factions to load.");
+            $this->getPlugin()->getLogger()->info("No factions to load.");
         }
+
+        return parent::init();
     }
 
     /**
@@ -33,18 +39,12 @@ class FactionManager
         foreach ($factions as $i => $name) {
             $faction = $this->getPlugin()->getDataProvider()->getFactionData($name);
             if(empty($faction)){
-                $this->getPlugin()->getDataProvider()->deleteFactionFile($name);
                 return;
             }
             if($this->loadFaction($name, $faction) instanceof Faction){
                 $this->getPlugin()->getLogger()->debug("#$i: Loaded faction '$name'");
             }
         }
-    }
-
-    public function getPlugin() : UltraFactions
-    {
-        return $this->plugin;
     }
 
     /**
@@ -65,13 +65,13 @@ class FactionManager
     }
 
     /**
-     * @param $name
+     * @param $faction
      * @return null|Faction
      */
-    public function getFaction($name)
+    public function getFactionByName($faction)
     {
-        if (isset($this->factions[strtolower($name)])) {
-            return $this->factions[strtolower($name)];
+        foreach ($this->factions as $f) {
+            if ($f->getName() == strtolower($faction)) return $f;
         }
         return null;
     }
@@ -109,10 +109,15 @@ class FactionManager
         $faction->save(); // What an useless function, isn't it? xD
     }
 
+    public function getAll()
+    {
+        return $this->factions;
+    }
+
     public function close()
     {
         $this->save();
-        $this->plugin->getLogger()->debug("Closed FactionManager.");
+        $this->getPlugin()->getLogger()->debug("Closed FactionManager.");
     }
 
     /**
@@ -131,4 +136,5 @@ class FactionManager
         new Config($this->getPlugin()->getDataFolder() . "factions.yml", Config::YAML, ['factions' => $factions]);
         $this->getPlugin()->getLogger()->info("Saved factions data.");
     }
+
 }

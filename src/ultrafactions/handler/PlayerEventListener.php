@@ -1,13 +1,10 @@
 <?php
 namespace ultrafactions\handler;
 
-use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\player\PlayerPreLoginEvent;
-use pocketmine\Player;
-use ultrafactions\Faction;
 use ultrafactions\Member;
 use ultrafactions\UltraFactions;
 
@@ -15,6 +12,7 @@ class PlayerEventListener implements Listener
 {
     /** @var UltraFactions $plugin */
     private $plugin;
+
     private $chatFormat;
 
     public function __construct(UltraFactions $plugin)
@@ -35,23 +33,19 @@ class PlayerEventListener implements Listener
     {
         $p = $e->getPlayer();
 
-        try {
-            $this->plugin->registerPlayer($p);
-        } catch (\Exception $e) {
-            $this->plugin->getLogger()->warning("Failed to register player '" . $p->getName() . "' (" . $e->getMessage() . ")");
-        }
 
-        // Test
-
-        if (($m = $this->plugin->getMember($p)) instanceof Member) {
-            $l = $this->plugin->getLogger();
-            $l->info("Member class for player " . $p->getName() . ' was created');
-            if ($m->isInFaction()) {
-                $l->info("He is in faction " . $m->getFaction()->getName());
-            } else {
-                $l->info("He is not in faction");
-            }
+        # Create Member class if player is in any faction
+        if ($this->getPlugin()->getMemberManager()->isMember($p)) {
+            echo "Player is member";
+            $this->getPlugin()->getMemberManager()->registerPlayer($p);
+        } else {
+            echo "Player is not a member";
         }
+    }
+
+    public function getPlugin() : UltraFactions
+    {
+        return $this->plugin;
     }
 
     /**
@@ -62,7 +56,7 @@ class PlayerEventListener implements Listener
     public function onPlayerChat(PlayerChatEvent $e)
     {
         $p = $e->getPlayer();
-        if ($this->plugin->isInFaction($p)) {
+        if ($this->getPlugin()->isInFaction($p)) {
             $m = $this->plugin->getMember($p);
             $f = $m->getFaction(); // Well this should return Faction
             $cf = $this->chatFormat;
@@ -81,31 +75,6 @@ class PlayerEventListener implements Listener
      */
     public function onDamage(EntityDamageEvent $e)
     {
-        $victim = $e->getEntity();
-        if ($e instanceof EntityDamageByEntityEvent) {
-            $attacker = $e->getDamager();
-            if ($attacker instanceof Player and $victim instanceof Player) {
-                $vM = $this->plugin->getMember($attacker);
-                $aM = $this->plugin->getMember($attacker);
-                if ($vM->getFaction() instanceof Faction and $aM->getFaction() instanceof Faction) {
-                    /** @var Faction $vF */
-                    $vF = $vM->getFaction();
-                    /** @var Faction $aF */
-                    $aF = $aM->getFaction();
-                    if ($vF === $aF) {
-                        $e->setCancelled(true);
-                        $attacker->sendTip("You are on the same faction");
-                    } elseif ($aF->isAlly($vF)) {
-                        $e->setCancelled(true);
-                        $attacker->sendTip("Your faction is in allies with his");
-                    }
-                }
-            }
-        }
-    }
-
-    public function getPlugin() : UltraFactions
-    {
-        return $this->plugin;
+        # TODO
     }
 }

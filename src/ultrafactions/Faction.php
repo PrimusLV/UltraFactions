@@ -2,6 +2,7 @@
 namespace ultrafactions;
 
 use pocketmine\level\Position;
+use pocketmine\Player;
 
 class Faction
 {
@@ -55,6 +56,7 @@ class Faction
      * Faction constructor.
      * Faction will adapt to invalid data given and use Faction::$defaultData
      *
+     * @throws \Exception
      * @param $name
      * @param array $data
      */
@@ -94,19 +96,27 @@ class Faction
         }
     }
 
-    public static function getDefaultData() : array
+    public function getDisplayName() : string
     {
-        self::$defaultData;
+        return $this->displayName;
     }
 
-    /**
-     * Should be not called more than once.
-     *
-     * @param UltraFactions $p
-     */
+    public function getLeader() : string 
+    {
+        foreach ($this->members as $member => $rank) {
+            if ($rank === Member::RANK_LEADER) return $member;
+        }
+        return "";
+    }
+
+    public static function getDefaultData() : array
+    {
+        return self::$defaultData;
+    }
+
     public static function setPlugin(UltraFactions $p)
     {
-        if(!self::$plugin) self::$plugin = $p;
+        if (!self::$plugin) self::$plugin = $p;
     }
 
     /**
@@ -162,102 +172,19 @@ class Faction
         return $this->plots;
     }
 
-    /**
-     * @param $name
-     * @return bool
-     */
-    public function isMember($name) : bool
-    {
-        return in_array(strtolower($name), $this->members, true);
-    }
-
-    /**
-     * When setting a relationships with factions these functions will remove it from opposite side
-     *
-     * # TODO: Call events
-     * @param Faction $faction
-     */
-    public function addEnemy(Faction $faction)
-    {
-        if ($this->isAlly($faction)) {
-            $this->removeAlly($faction);
-        }
-        $this->enemies[] = $faction->getName();
-    }
-
-    /**
-     * @param Faction $faction
-     * @return bool
-     */
-    public function isAlly(Faction $faction) : bool
-    {
-        return in_array($faction->getName(), $this->allies, true) === true;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName() : string
-    {
-        return $this->name;
-    }
-
-    public function getDisplayName() : string
-    {
-        return $this->displayName;
-    }
-
     public function getCreationTime() : int
     {
         return $this->created;
     }
 
     /**
-     * @param Faction $faction
+     * @return Player[]
      */
-    public function removeAlly(Faction $faction)
-    {
-    }
-
-    /**
-     * @param Faction $faction
-     */
-    public function addAlly(Faction $faction)
-    {
-        if ($this->isEnemy($faction)) {
-            $this->removeEnemy($faction);
-        }
-        $this->allies[] = $faction;
-    }
-
-    /**
-     * @param Faction $faction
-     * @return bool
-     */
-    public function isEnemy(Faction $faction) : bool
-    {
-        return in_array($faction->getName(), $this->enemies, true) === true;
-    }
-
-    /**
-     * @param Faction $faction
-     */
-    public function removeEnemy(Faction $faction)
-    {
-    }
-
-    public function sendMessage($message)
-    {
-        foreach ($this->getMembers() as $player) {
-            $player->sendMessage($message);
-        }
-    }
-
-    public function getMembers()
+    public function getOnlineMembers() : array
     {
         $m = [];
-        foreach ($this->getPlugin()->getServer()->getOnlinePlayers() as $p) {
-            if ($this->getPlugin()->getPlayerFaction($p) === $this) $m[] = $p;
+        foreach ($this->getPlugin()->getMemberManager()->getAll() as $p) {
+            if ($p->getFaction() === $this) $m[] = $p;
         }
         return $m;
     }
@@ -267,7 +194,24 @@ class Faction
         return self::$plugin;
     }
 
+    public function sendMessage($message)
+    {
+        foreach ($this->getMembers() as $player) {
+            $player->sendMessage($message);
+        }
+    }
+
     // Some functions :D
+
+    /**
+     * This returns all member's names
+     *
+     * @return String[]
+     */
+    public function getMembers() : array
+    {
+        return $this->members;
+    }
 
     public function sendPopup($popup)
     {
@@ -293,6 +237,14 @@ class Faction
         $this->getPlugin()->getDataProvider()->setFactionData($this->getName(), $this->getFactionData(), true);
     }
 
+    /**
+     * @return string
+     */
+    public function getName() : string
+    {
+        return $this->name;
+    }
+
     public function getFactionData() : array
     {
         $d = [];
@@ -302,12 +254,10 @@ class Faction
         return $d;
     }
 
-    public function attachMember(Member $player, $rank = Member::RANK_MEMBER) : bool
+    public function attachMember(Member $player, $rank = Member::RANK_MEMBER)
     {
-        $this->members[strtolower($player->getName())] = $player;
-        $player->setFaction($this);
-        $player->setRank($rank);
-        return true;
+        $this->members[strtolower($player->getName())] = $rank;
+        return $rank;
     }
 
     public function detachMember(Member $player) : bool
@@ -316,39 +266,35 @@ class Faction
         return true;
     }
 
-    public function getLeader() : string 
+    public function setMemberRank(Member $member, $rank) : bool
     {
-        foreach($this->members as $member => $rank)
-        {
-            if($rank === Member::RANK_LEADER) return $member;
-        }     
-        return "";
-    }
-
-    public function setLeader(Member $member) : bool {
-        if($this->isMember($member)){
-            $this->leader = $member->getName();
-            $member->setRank(Member::RANK_LEADER);
+        if ($this->isMember($member->getPlayer()->getName())) {
+            $this->members[strtolower($member->getPlayer()->getName())] = $rank;
+            return true;
         }
         return false;
     }
 
-    public function newLeader(Member $member){
-        # TODO
+    // Integration with plugin
+
+    /**
+     * @param $name
+     * @return bool
+     */
+    public function isMember($name) : bool
+    {
+        var_dump($this->members);
+        if (array_key_exists(strtolower($name), $this->members)) {
+            echo "Player is member of " . $this->getDisplayName() . " faction";
+            return true;
+        } else {
+            echo "Player isn't member of " . $this->getDisplayName() . " faction";
+            return false;
+        }
     }
 
-    // Plots
-
-    public function claimPlot($chunk){
-        var_dump($chunk);
-        # TODO
-    }
-
-    public function unclaimPlot($chunk){
-        # TODO
-    }
-
-    public function isPlotOwner($plot){
+    public function newLeader(Member $member)
+    {
         # TODO
     }
 
