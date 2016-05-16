@@ -9,6 +9,7 @@
 namespace ultrafactions;
 
 use pocketmine\Player;
+use ultrafactions\faction\Faction;
 
 class Member
 {
