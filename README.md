@@ -23,3 +23,29 @@ $build->setName("Name")
 $build->build();
 ```
 
+Add member to faction:
+```php
+/** @var Faction $faction */
+/** @var Member $member */
+$member->join($faction, Member::RANK_MEMBER);
+```
+
+Remove player from faction:
+```php
+/** @var Member $member */
+$member->leave();
+```
+
+Claiming plots:
+```php
+// Let's assume that player touched ground with 'claiming' stick
+/** @var Player $player */
+/** @var UltraFactions $uf */
+$member = $uf->getMemberManager()->getMember($player);
+if(!$member) return false; // Player isn't in faction
+if($uf->getPlotManager()->claimPlot($member->getFaction(), $player)){
+    // Faction claimed plot on $player position
+} else {
+    // Failed to claim plot
+}
+```
