@@ -2,7 +2,7 @@
 namespace ultrafactions\manager;
 
 use pocketmine\level\Position;
-use ultrafactions\Faction;
+use ultrafactions\faction\Faction;
 
 class PlotManager extends Manager
 {
@@ -45,7 +45,7 @@ class PlotManager extends Manager
     public function close()
     {
         $this->save();
-        $this->plugin->getLogger()->debug("Closed PlotManager.");
+        $this->getPlugin()->getLogger()->debug("Closed PlotManager.");
     }
 
     private function save()
@@ -65,10 +65,10 @@ class PlotManager extends Manager
      */
     public function claimPlot(Faction $faction, Position $pos, $force = false) : bool
     {
-        if ($this->getPlotOwner($pos) != null && !$force) return false;
-        if ($this->isAreaProtected($pos) && !$force) return false;
+        if ($this->getPlotOwner($pos) != null and !$force) return false;
+        if ($this->isAreaProtected($pos) and !$force) return false;
         $this->plots[$faction->getName()][$pos->getLevel()->getName()][] = self::hashPlot($pos);
-        return $this->getPlotOwner($pos) === $faction->getName(); // This must be true, right?
+        return $this->getPlotOwner($pos) === $faction;
         //return true; # TODO
     }
 
@@ -81,13 +81,15 @@ class PlotManager extends Manager
         $name = $pos->getLevel()->getName();
         $hash = self::hashPlot($pos);
         foreach ($this->plots as $faction => $world) {
-            foreach ($world as $worldName => $plotHash) {
-                if ($worldName === $name and $hash === $plotHash) {
-                    if ($f = $this->getPlugin()->getFactionManager()->getFactionByName($faction)) {
-                        return $f;
-                    } else {
-                        # Remove faction plots if faction is invalid?
-                        break;
+            foreach ($world as $worldName => $plots) {
+                foreach ($plots as $plot) {
+                    if ($worldName == $name and $hash == $plot) {
+                        if ($f = $this->getPlugin()->getFactionManager()->getFactionByName($faction)) {
+                            return $f;
+                        } else {
+                            # Remove faction plots if faction is invalid?
+                            break;
+                        }
                     }
                 }
             }
@@ -106,7 +108,9 @@ class PlotManager extends Manager
      */
     public function isAreaProtected(Position $pos) : bool
     {
+        if (array_key_exists($pos->getLevel()->getName(), $this->protectedWorlds)) return true;
         # TODO
+        return false;
     }
 
     /**

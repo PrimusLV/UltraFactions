@@ -13,7 +13,7 @@ use pocketmine\command\CommandSender;
 use pocketmine\command\PluginIdentifiableCommand;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat as Text;
-use ultrafactions\Faction;
+use ultrafactions\faction\Faction;
 use ultrafactions\Member;
 use ultrafactions\UltraFactions;
 
@@ -56,12 +56,12 @@ class FactionCommand extends Command implements PluginIdentifiableCommand
                         return true;
                     }
                     $member = $this->getPlugin()->getMemberManager()->getMember($sender, true);
-                    if ($member->isInFaction()) {
+                    if ($member->getFaction() != null) {
                         $member->getPlayer()->sendMessage("You are already in faction!"); # BadBoy
                         return true;
                     }
                     if(isset($args[1])){
-                        if($this->getPlugin()->getFaction($args[1]) instanceof Faction){
+                        if ($this->getPlugin()->getFactionManager()->getFactionByName($args[1]) instanceof Faction) {
                             $sender->sendMessage("Faction already exists");
                             return true;
                         }
@@ -97,7 +97,7 @@ class FactionCommand extends Command implements PluginIdentifiableCommand
                         'displayName' => $args[1],
                         'members' => [$sender->getName() => Member::RANK_LEADER],
                     ];
-                    if(($f = $this->getPlugin()->createFaction($args[1], $data)) instanceof Faction){
+                        if (($f = $this->getPlugin()->getFactionManager()->createFaction($args[1], $data)) instanceof Faction) {
                         $member->join($f);
                         $sender->sendMessage("Faction created");
                     } else {
@@ -112,7 +112,7 @@ class FactionCommand extends Command implements PluginIdentifiableCommand
                 case 'info':
                     # TODO
                     if ( isset($args[1]) ){
-                        $faction = $this->getPlugin()->getFaction($args[1]);
+                        $faction = $this->getPlugin()->getFactionManager()->getFactionByName($args[1]);
                         if($faction instanceof Faction){
                             $sender->sendMessage("--- Showing Faction's {$faction->getName()} info ---");
                             $sender->sendMessage("Name: ".$faction->getName());
@@ -121,7 +121,7 @@ class FactionCommand extends Command implements PluginIdentifiableCommand
                             $sender->sendMessage("Leader: ".$faction->getLeader());
                             $sender->sendMessage("Bank: ".($sender->hasPermission("uf.command.info.bank") ? $faction->getBank() : "SECRET"));
                             $sender->sendMessage("Home: ".($sender->hasPermission("uf.command.info.home") ? $faction->getHome() : "SECRET"));
-                            $sender->sendMessage("Plots: ".count($faction->getPlots()));
+                            $sender->sendMessage("Plots: " . count($this->getPlugin()->getPlotManager()->getPlotsByFaction($faction)));
                         } else {
                             $sender->sendMessage("Faction not found");
                         }
@@ -241,10 +241,15 @@ class FactionCommand extends Command implements PluginIdentifiableCommand
     }
 
     /**
-     * @return \pocketmine\plugin\Plugin
+     * @return UltraFactions
      */
-    public function getPlugin()
+    public function getPlugin() : UltraFactions
     {
         return $this->plugin;
+    }
+
+    private function sendUsage($sender, $string)
+    {
+        # TODO
     }
 }

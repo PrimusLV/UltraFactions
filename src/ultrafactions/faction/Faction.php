@@ -1,8 +1,10 @@
 <?php
-namespace ultrafactions;
+namespace ultrafactions\faction;
 
 use pocketmine\level\Position;
 use pocketmine\Player;
+use ultrafactions\Member;
+use ultrafactions\UltraFactions;
 
 class Faction
 {

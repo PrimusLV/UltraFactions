@@ -10,6 +10,8 @@ use ultrafactions\data\MySQLDataProvider;
 use ultrafactions\data\PocketCoreDataProvider;
 use ultrafactions\data\SQLite3DataProvider;
 use ultrafactions\economy\Economy;
+use ultrafactions\faction\Faction;
+use ultrafactions\faction\FactionBuilder;
 use ultrafactions\handler\FactionEventListener;
 use ultrafactions\handler\PlayerEventListener;
 use ultrafactions\manager\FactionManager;
@@ -45,6 +47,7 @@ class UltraFactions extends PluginBase
         Manager::setPlugin($this);
         Member::setPlugin($this);
         Faction::setPlugin($this);
+        FactionBuilder::setPlugin($this);
     }
 
     /**
@@ -87,11 +90,11 @@ class UltraFactions extends PluginBase
         $pm->registerEvents(new PlayerEventListener($this), $this);
         $pm->registerEvents(new FactionEventListener($this), $this);
 
-        // Function name sucks, It will be register only one command
+        // Function name sucks, It will be register only one command xP
         $this->registerCommands();
-        $this->getLogger()->debug("Commands registered.");
 
         $this->getLogger()->info(Text::GREEN."Plugin loaded.");
+
     }
 
     private function loadDataProvider()
@@ -136,6 +139,8 @@ class UltraFactions extends PluginBase
         if ($this->factionManager != null) $this->factionManager->close();
         # Save members
         if ($this->factionManager != null) $this->memberManager->close();
+        # Save plots
+        if ($this->plotManager != null) $this->plotManager->close();
         # And close connections or so on data provider class
         if ($this->data != null) $this->data->close();
 

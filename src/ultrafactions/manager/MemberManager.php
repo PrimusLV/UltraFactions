@@ -10,7 +10,7 @@ namespace ultrafactions\manager;
 
 use pocketmine\Player;
 use ultrafactions\data\DataProvider;
-use ultrafactions\Faction;
+use ultrafactions\faction\Faction;
 use ultrafactions\Member;
 
 class MemberManager extends Manager
@@ -55,7 +55,7 @@ class MemberManager extends Manager
             $faction = null;
             if(isset($memberD['faction'])) {
                 try {
-                    $faction = $this->getPlugin()->getFaction($memberD['faction']);
+                    $faction = $this->getPlugin()->getFactionManager()->getFactionByName($memberD['faction']);
                     if (!$faction INSTANCEOF Faction) {
                         $faction = null;
                         throw new \Exception("Member is in invalid faction");
@@ -69,10 +69,11 @@ class MemberManager extends Manager
             return $m;
     }
 
-    public function isMember(Player $player) : bool
+    public function isMember($player) : bool
     {
+        $name = $player instanceof Player ? $player->getName() : $player;
         foreach ($this->getPlugin()->getFactionManager()->getAll() as $faction) {
-            if ($faction->isMember($player->getName())) return true;
+            if ($faction->isMember($name)) return true;
         }
         return false;
     }
@@ -95,7 +96,10 @@ class MemberManager extends Manager
             $this->getPlugin()->getLogger()->info("Saved members data.");
     }
 
-    public function getAll() : array 
+    /**
+     * @return Member[]
+     */
+    public function getAll() : array
     {
         return $this->members;
     }

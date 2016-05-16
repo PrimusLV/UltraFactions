@@ -52,6 +52,8 @@ abstract class DataProvider
 
     public abstract function get($key);
 
+    public abstract function save($key, array $data);
+
     public function close()
     {
         # Call parent function to display this message :P

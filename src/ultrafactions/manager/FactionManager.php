@@ -2,7 +2,8 @@
 namespace ultrafactions\manager;
 
 use pocketmine\utils\Config;
-use ultrafactions\Faction;
+use ultrafactions\faction\Faction;
+use ultrafactions\faction\FactionBuilder;
 use ultrafactions\UltraFactions;
 
 class FactionManager extends Manager
@@ -55,7 +56,11 @@ class FactionManager extends Manager
     private function loadFaction($name, array $faction)
     {
         try {
-            $f = new Faction($name, $faction);
+            $b = new FactionBuilder();
+            $b->setName($name)
+                ->fromArray($faction);
+            $f = $b->build();
+            if ($f instanceof Faction) echo "Faction " . $f->getDisplayName() . " loaded";
         } catch (\Exception $e) {
             $this->getPlugin()->getLogger()->warning("Following error occurred while loading faction: ".$e->getMessage());
             return null;
