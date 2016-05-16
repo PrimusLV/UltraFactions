@@ -81,9 +81,12 @@ class UltraFactions extends PluginBase
 
         // Load managers
         $this->getLogger()->debug("Loading managers...");
-        $this->factionManager = new FactionManager($this);
         $this->memberManager = new MemberManager($this);
+        $this->memberManager->init();
+        $this->factionManager = new FactionManager($this);
+        $this->factionManager->init();
         $this->plotManager = new PlotManager($this);
+        $this->plotManager->init();
         $this->getLogger()->debug("Managers loaded.");
 
         // Lets register some event listeners below

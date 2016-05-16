@@ -18,11 +18,9 @@ class PlotManager extends Manager
 
     public function __construct()
     {
-        // IDEA: Make access to main class same as for Faction & Member class, implement this to super class: Manager
-        $this->init();
     }
 
-    protected function init() : bool
+    public function init() : bool
     {
         $plots = $this->getPlugin()->getDataProvider()->get('plots');
         if (!empty($plots)) {

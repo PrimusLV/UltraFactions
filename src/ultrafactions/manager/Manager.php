@@ -28,7 +28,7 @@ abstract class Manager
      *
      * @return bool
      */
-    protected function init() : bool
+    public function init() : bool
     {
         if ($this->getPlugin() instanceof UltraFactions === false) return false;
         return true;

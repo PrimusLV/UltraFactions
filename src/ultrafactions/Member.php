@@ -37,11 +37,7 @@ class Member
     public function __construct(Player $player, $faction, $power = 0)
     {
         $this->player = $player;
-        if (empty($stats)) {
-            $this->stats = self::$defaultData['stats'];
-        } else {
-            $this->stats = $stats;
-        }
+
         if ($faction != null) {
             if ($faction instanceof Faction) {
                 $this->faction = $faction;

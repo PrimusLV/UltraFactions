@@ -11,7 +11,9 @@ class FactionBuilder
     // Error codes
     const RET_DUPLICATE = 001; // Name already taken
     const RET_INVALID_NAME = 002; // Name is invalid
-    const RET_INVALID_LEADER = 003; // Invalid leader
+    const RET_INVALID_LEADER = 003;
+    const RET_NO_LEADER = 004;
+    const RET_INVALID_DISPLAY_NAME = 005; // Invalid leader
 
     /** @var UltraFactions $plugin */
     private static $plugin;
@@ -133,8 +135,14 @@ class FactionBuilder
     public function fromArray(array $data)
     {
         foreach ($data as $key => $item) {
-            if (!isset($this->{$key})) continue;
             $this->{$key} = $item;
+
+            if ($key == 'members') {
+                echo $key;
+                foreach ($item as $member => $rank) {
+                    if ($rank === Member::RANK_LEADER) $this->leader = $member;
+                }
+            }
         }
     }
 
@@ -142,15 +150,23 @@ class FactionBuilder
      * Returns created faction on success or null on failure
      *
      * @return Faction|null
+     * @throws \Exception
      */
     public function build()
     {
-        if ($this->isValidData()) {
+        if (($r = $this->isValidData()) === true) {
             $faction = new Faction($this->name, $this->toArray());
             $this->getPlugin()->getFactionManager()->addFaction($faction);
             return $this->getPlugin()->getFactionManager()->getFactionByName($this->name);
+        } else {
+            $err = "";
+            if ($r === self::RET_DUPLICATE) $err = "Faction with that name already exists";
+            if ($r === self::RET_INVALID_LEADER) $err = "Given player can not be this faction leader";
+            if ($r === self::RET_NO_LEADER) $err = "Faction can not exist without a leader";
+            if ($r === self::RET_INVALID_NAME) $err = "Invalid name";
+            if ($r === self::RET_INVALID_DISPLAY_NAME) $err = "Invalid display name ({$this->displayName})";
+            throw new \Exception($err);
         }
-        return null;
     }
 
     /**
@@ -166,6 +182,7 @@ class FactionBuilder
         if (/** Check if name is valid */
         !true
         ) return self::RET_INVALID_NAME;
+        if ($this->displayName == "") return self::RET_INVALID_DISPLAY_NAME;
 
         // Check if leader is valid
         if (($leader = $this->leader) != null) {
@@ -177,7 +194,9 @@ class FactionBuilder
                 $member = $this->getPlugin()->getMemberManager()->getOfflineMember($leader);
             }
             if($member->getFaction() instanceof Faction) return self::RET_LEADER_IN_FACTION; */
-            if ($this->getPlugin()->getMemberManager()->isMember($leader)) return self::RET_INVALID_LEADER;
+            if ($this->getPlugin()->getMemberManager()->isMember($leader)) {
+                return self::RET_INVALID_LEADER;
+            }
         } else {
             return self::RET_INVALID_LEADER;
         }

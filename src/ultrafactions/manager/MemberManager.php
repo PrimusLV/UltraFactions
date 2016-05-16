@@ -24,7 +24,7 @@ class MemberManager extends Manager
         $this->init();
     }
 
-    protected function init() : bool
+    public function init() : bool
     {
         return parent::init();
     }
@@ -35,7 +35,7 @@ class MemberManager extends Manager
             return $this->members[strtolower($player->getName())];
         } else {
             if ($register) {
-                $this->registerPlayer($player);
+                return $this->registerPlayer($player);
             }
         }
         return null;
@@ -45,13 +45,12 @@ class MemberManager extends Manager
      * Before players can use UltraFaction features they have to be registered
      *
      * @param Player $player
-     * @return bool
+     * @return Member
      */
-    public function registerPlayer(Player $player)
+    public function registerPlayer(Player $player) : Member
     {
             $memberD = $this->getPlugin()->getDataProvider()->getMemberData(DataProvider::playerName($player));
             $power = isset($memberD['power']) ? $memberD['power'] : 0;
-            $stats = isset($memberD['stats']) ? $memberD['stats'] : array();
             $faction = null;
             if(isset($memberD['faction'])) {
                 try {
@@ -64,7 +63,7 @@ class MemberManager extends Manager
                     $this->getPlugin()->getLogger()->warning("Following error occurred while registering player: " . $e->getMessage());
                 }
             }
-            $m = new Member($player, $faction, $power, $stats);
+        $m = new Member($player, $faction, $power);
             $this->members[strtolower($player->getName())] = $m;
             return $m;
     }

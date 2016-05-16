@@ -14,10 +14,9 @@ class FactionManager extends Manager
 
     public function __construct(UltraFactions $plugin)
     {
-        $this->init();
     }
 
-    protected function init() : bool
+    public function init() : bool
     {
 
         $factions = (new Config($this->getPlugin()->getDataFolder() . "factions.yml", Config::YAML))->get('factions');
