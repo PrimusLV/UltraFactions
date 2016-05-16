@@ -37,20 +37,13 @@ class Faction
     protected $name = "";
     /** @var string $displayName */
     protected $displayName = "";
-    /** @var int $bank */
-    protected $bank = 0;
     /** @var int $power */
     protected $power;
     /** @var Position $home */
     protected $home = null;
-    /** @var array $allies */
-    protected $allies = [];
-    /** @var array $enemies */
-    protected $enemies = [];
     /** @var String[] $members */
     protected $members = [];
     /** @var String[] $plots */
-    protected $plots = [];
     /** @var int $created */
     protected $created;
 
