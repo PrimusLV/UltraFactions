@@ -7,3 +7,19 @@ Rich full Faction plugin for MineCraft:PE Server software PocketMine-MP
 #InDEV
 No releases yet.
 ```
+
+### API Examples
+
+Creating new Faction:
+```php
+// This is just an idea, this doesn't work yet
+$build = new FactionBuilder();
+
+$build->setName("Name")
+  ->setDisplayName("DisplayName")
+  ->setLeader($player) // Clan can not exist without a leader
+  ->setHome($player->getLevel()->getSafeSpawn());
+  
+$build->build();
+```
+
